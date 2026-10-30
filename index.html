@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TP evaluado · Variables separables · laboratoriobest-IA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --lab-terra:#b57d4c; --lab-blue:#415a8e; --lab-dark:#20201c; --lab-cream:#faf8f1; --lab-gray:#6579a1;
+  --navy:#0f2244;
+  --paper:#FBF8F1; --ink:#20201c; --muted:#5f5b53;
+  --blue:#2B5A93; --amber:#C77A40; --green:#45785A; --rust:#BC5235; --violet:#6E4EAA;
+  --blue-bg:#eef3f9; --amber-bg:#fbf3e8; --green-bg:#edf4ef; --rust-bg:#faeeea; --violet-bg:#f2eef8;
+  --line:#e2ddd2;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Hanken Grotesk',sans-serif;font-size:15px;line-height:1.6;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(rgba(43,90,147,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(43,90,147,.07) 1px,transparent 1px);background-size:28px 28px}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:400;line-height:1.2;margin:0 0 .5em}
+h2{font-size:2rem;color:var(--navy)} h3{font-size:1.25rem;color:var(--navy);margin-top:1.4em}
+p{margin:.6em 0}
+.katex{font-size:1.08em}
+.katex-display{margin:.7em 0 !important;overflow-x:auto;overflow-y:hidden !important;padding:2px 0}
+.katex-display>.katex{white-space:normal}
+
+/* ===== chrome ===== */
+.topbar{background:linear-gradient(135deg,var(--navy) 0%,#1a3a6e 100%);color:#e0f2fe;padding:14px 0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.topbar-inner{max-width:1080px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-inspt{font-size:12px;color:#7dd3fc;letter-spacing:.1em;font-weight:700}
+.brand-title{font-family:'Fraunces',serif;font-size:18px;color:#fff;font-weight:700}
+.brand-sub{font-size:12px;color:#bfdbfe}
+.lab-logo{background:var(--lab-cream);padding:8px 18px 7px;border-radius:12px;text-align:left;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.lab-name{display:flex;align-items:center;font-family:'Fraunces',Georgia,serif;font-size:16px;font-weight:700;letter-spacing:-0.01em;line-height:1.2}
+.lab-name .bullet{width:8px;height:8px;border-radius:50%;background:var(--lab-terra);flex-shrink:0;margin-right:7px}
+.lab-name .lab{color:var(--lab-dark)} .lab-name .best{color:var(--lab-terra)} .lab-name .ia{color:var(--lab-blue)}
+.lab-sub{color:var(--lab-gray);font-size:11px;font-weight:500;margin-top:1px;padding-left:15px;font-family:'Hanken Grotesk',sans-serif}
+.ej-lab{font-family:'Fraunces',Georgia,serif;font-size:12.5px;font-weight:700;display:flex;align-items:center}
+.ej-lab .bullet{width:6px;height:6px;border-radius:50%;background:var(--lab-terra);margin-right:5px}
+.ej-lab .lab{color:var(--lab-dark);opacity:.75} .ej-lab .best{color:var(--lab-terra)} .ej-lab .ia{color:var(--lab-blue)}
+.site-footer{background:var(--navy);color:#cbd5e1;padding:30px 0 24px;margin-top:40px}
+.footer-inner{max-width:1080px;margin:0 auto;padding:0 20px;text-align:center}
+.footer-quote{font-family:'Fraunces',serif;font-style:italic;font-size:1.1rem;color:#e0f2fe;margin-bottom:16px}
+.footer-lab{display:inline-block;background:var(--lab-cream);padding:10px 22px 9px;border-radius:12px;text-align:left;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.footer-lab .lab-name{font-size:17px} .footer-lab .lab-sub{font-size:12px}
+
+/* ===== respaldo sin KaTeX ===== */
+.mfall{font-family:'STIX Two Text','Times New Roman',serif;font-size:1.06em;white-space:nowrap}
+.mfall.disp{display:block;text-align:center;margin:.7em 0;overflow-x:auto;overflow-y:hidden !important;white-space:normal}
+.mfall .v{font-style:italic}
+.mfall .frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .15em;line-height:1.15}
+.mfall .frac>span{padding:0 .2em} .mfall .frac>span:first-child{border-bottom:1px solid currentColor}
+.mfall .big{font-size:1.5em;line-height:1;vertical-align:middle;margin:0 .1em}
+.mfall .lim{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.05}
+.mfall .lim>small{font-size:.65em} .mfall sup,.mfall sub{font-size:.7em;line-height:0}
+#testPanel{position:fixed;right:10px;bottom:10px;z-index:99;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;font:12px 'Fira Code',monospace;max-height:50vh;overflow:auto;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+#testPanel .ok{color:var(--green)} #testPanel .fail{color:var(--rust);font-weight:700}
+
+/* ===== layout ===== */
+main{max-width:860px;margin:0 auto;padding:28px 20px 40px}
+.vista{display:none} .vista.on{display:block}
+.badge{display:inline-block;font:500 .7rem 'Fira Code',monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.lead{font-size:1.05rem;color:var(--muted);max-width:680px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin:18px 0;box-shadow:0 1px 3px rgba(20,30,50,.05)}
+.def{background:var(--blue-bg);border-left:5px solid var(--blue);border-radius:0 12px 12px 0;padding:14px 20px;margin:18px 0}
+.def .tt,.nota .tt,.warn .tt{font:500 .7rem 'Fira Code',monospace;letter-spacing:.15em;text-transform:uppercase;margin-bottom:4px}
+.def .tt{color:var(--blue)}
+.nota{background:var(--amber-bg);border-left:5px solid var(--amber);border-radius:0 12px 12px 0;padding:12px 18px;margin:16px 0} .nota .tt{color:var(--amber)}
+.warn{background:var(--rust-bg);border-left:5px solid var(--rust);border-radius:0 12px 12px 0;padding:12px 18px;margin:16px 0} .warn .tt{color:var(--rust)}
+@media (max-width:640px){h2{font-size:1.6rem} main{padding:20px 16px 32px}}
+table.tabla{width:100%;border-collapse:collapse;font-size:.95rem;margin:10px 0}
+table.tabla th,table.tabla td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+table.tabla th{font:500 .7rem 'Fira Code',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tabla-wrap{overflow-x:auto;overflow-y:hidden !important}
+ol.metodo{padding-left:0;list-style:none;counter-reset:m;margin:14px 0}
+ol.metodo li{position:relative;padding:10px 14px 10px 54px;background:#fff;border:1px solid var(--line);border-radius:12px;margin:8px 0}
+ol.metodo li::before{counter-increment:m;content:counter(m);position:absolute;left:14px;top:10px;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font:600 .85rem 'Fira Code',monospace;display:flex;align-items:center;justify-content:center}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:9px;padding:9px 18px;font:600 .9rem 'Hanken Grotesk',sans-serif;cursor:pointer}
+.btn:hover{background:#234a7a}
+.btn.sec{background:#fff;color:var(--blue);border:1px solid var(--blue)} .btn.sec:hover{background:var(--blue-bg)}
+.btn.small{padding:5px 11px;font-size:.8rem}
+.btn.ghost{background:none;color:var(--muted);border:1px solid var(--line)} .btn.ghost:hover{background:#fff;color:var(--navy)}
+.btn.green{background:var(--green)} .btn.green:hover{background:#365f47}
+.btn.rust{background:var(--rust)} .btn.rust:hover{background:#9a4229}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:disabled:hover{background:var(--blue)} .btn.ghost:disabled:hover{background:none;color:var(--muted)} .btn.sec:disabled:hover{background:#fff}
+.hero{padding:26px 0 8px}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:700;color:var(--navy);line-height:1}
+.hero .sub{font:500 .75rem 'Fira Code',monospace;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+@media (max-width:640px){.form{grid-template-columns:1fr}}
+.form label,.resp label{display:block;font:500 .7rem 'Fira Code',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.form input,.form select,.resp input{width:100%;font:400 1rem 'Hanken Grotesk',sans-serif;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.form input:focus,.resp input:focus{outline:2px solid var(--blue);border-color:var(--blue)}
+.acciones{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.estado{font:500 .75rem 'Fira Code',monospace;color:var(--muted);margin-left:auto}
+.fb{margin-top:8px;padding:10px 14px;border-radius:10px;font-size:.95rem;display:none}
+.fb.show{display:block}
+.fb.good{background:var(--green-bg);border:1px solid #bcd4c4;color:#274a35}
+.fb.bad{background:var(--rust-bg);border:1px solid #e6c2b6;color:#6e2c1c}
+.fb.mid{background:var(--amber-bg);border:1px solid #e8cfa8;color:#5a3a14}
+.fb.info{background:var(--blue-bg);border:1px solid #c8d6e8;color:#1e3f66}
+.barra{position:sticky;top:0;z-index:20;background:rgba(251,248,241,.97);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:8px 0}
+.barra-inner{max-width:860px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.barra .quien{font-weight:600;color:var(--navy)}
+.barra .prog{font:500 .75rem 'Fira Code',monospace;color:var(--muted)}
+.barra .track{flex:1 1 140px;height:8px;background:#e9e4d8;border-radius:99px;overflow:hidden}
+.barra .fill{height:100%;background:var(--green);width:0;transition:width .3s}
+
+/* ===== tarjetas ===== */
+.ej{background:#fff;border:1px solid var(--line);border-top:5px solid var(--ej,#2B5A93);border-radius:14px;margin:20px 0;overflow:hidden;scroll-margin-top:70px;position:relative}
+.ej.medio{--ej:#2B5A93;--ej-soft:#eef3f9;--ej-border:#c8d6e8} .ej.alto{--ej:#6E4EAA;--ej-soft:#f2eef8;--ej-border:#d9cdea}
+.ej.done{border-top-color:var(--green)}
+.ej .ej-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid var(--line);background:#fcfbf8;flex-wrap:wrap}
+.ej .ej-num{font:500 .75rem 'Fira Code',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ej)}
+.ej .ej-num .crit{margin-left:10px;color:#fff;background:var(--ej);border-radius:6px;padding:2px 7px;letter-spacing:.05em}
+.ej .ej-body{padding:12px 18px 16px}
+.ej .titulo{font-family:'Fraunces',Georgia,serif;font-size:1.15rem;color:var(--navy);margin:2px 0 6px}
+.ej .enun{font-size:1.05em;margin:4px 0 10px;background:var(--ej-soft);border:1px solid var(--ej-border);border-radius:10px;padding:10px 14px}
+.ej .consigna{font-size:.92rem;color:var(--muted);margin:0 0 10px}
+.ej .consigna b{color:var(--ej)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 10px}
+@media (max-width:640px){.opts{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;background:#fff;min-width:0}
+.opt:hover{border-color:var(--ej)}
+.opt input{margin:0;flex-shrink:0;accent-color:var(--ej)}
+.opt .let{font:600 .75rem 'Fira Code',monospace;color:#fff;background:var(--ej);border-radius:6px;padding:1px 7px;flex-shrink:0}
+.opt .tex{overflow-x:auto;overflow-y:hidden !important;min-width:0}
+.opt.sel{background:var(--ej-soft);border-color:var(--ej)}
+.frozen .opt{cursor:default} .frozen .opt:hover{border-color:var(--line)} .frozen .opt.sel:hover{border-color:var(--ej)}
+.opt.ok-mark{outline:2px solid var(--green)} .opt.no-mark{outline:2px solid var(--rust)}
+.resp{display:grid;grid-template-columns:1fr;gap:10px;margin:6px 0}
+@media (min-width:600px){.resp{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}}
+.resp label .katex,.resp label .mfall{text-transform:none;letter-spacing:0;font-size:1.05rem;color:var(--ink)}
+.resp .hint{font-size:.75rem;color:var(--muted);margin-top:3px}
+.foto{border:1px dashed var(--ej-border);border-radius:12px;padding:10px 14px 12px;margin:10px 0;background:#fffdf9}
+.foto .tt{font:500 .7rem 'Fira Code',monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--ej);margin-bottom:4px}
+.foto .fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.foto .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.foto .thumb{position:relative;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+.foto .thumb img{display:block;max-height:110px;max-width:150px}
+.foto .thumb .n{position:absolute;left:4px;top:4px;font:600 .7rem 'Fira Code',monospace;color:#fff;background:rgba(15,34,68,.8);border-radius:5px;padding:1px 6px}
+.foto .thumb button{position:absolute;right:4px;top:4px;border:0;background:rgba(188,82,53,.92);color:#fff;border-radius:5px;font:600 .7rem 'Hanken Grotesk',sans-serif;padding:2px 7px;cursor:pointer}
+.foto .fst{font-size:.85rem;color:var(--muted);margin-top:6px}
+.foto input[type=file]{display:none}
+.frozen input{background:#f4f1ea;color:#555}
+.pts{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--navy)}
+
+/* ===== pasos (resolución) ===== */
+.paso,.reso{border:1px solid var(--line);border-radius:10px;margin:8px 0;background:#fff;scroll-margin-top:70px}
+.paso>button,.reso>button{width:100%;text-align:left;background:none;border:0;padding:10px 14px;font:600 .95rem 'Hanken Grotesk',sans-serif;color:var(--navy);cursor:pointer;display:flex;gap:10px;align-items:center}
+.paso>button .num{font:500 .7rem 'Fira Code',monospace;color:#fff;background:var(--ej);border-radius:6px;padding:2px 7px;letter-spacing:.05em;white-space:nowrap}
+.paso>button .ttl,.reso>button .ttl{font-family:'Fraunces',Georgia,serif;font-weight:400;font-size:1.05rem}
+.paso>button .chev,.reso>button .chev{margin-left:auto;transition:transform .2s;color:var(--muted)}
+.paso.open>button .chev,.reso.open>button .chev{transform:rotate(90deg)}
+.paso>.cont,.reso>.cont{display:none;padding:2px 16px 14px;border-top:1px dashed var(--line)}
+.paso.open>.cont,.reso.open>.cont{display:block}
+.reso{border-color:#bcd4c4;background:var(--green-bg)} .reso>.cont{background:#fff;padding-top:8px}
+.calc{background:#fff;border-left:4px solid var(--ej-border);padding:4px 12px;margin:6px 0;border-radius:0 8px 8px 0}
+.calc-final{background:var(--ej-soft);border-left:4px solid var(--ej);padding:6px 12px;margin:8px 0;border-radius:0 8px 8px 0;font-weight:600}
+
+/* ===== resultados / informe ===== */
+.score{font-family:'Fraunces',serif;font-size:2.4rem;color:var(--navy);line-height:1;white-space:nowrap}
+.kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;font-size:.95rem;margin:8px 0}
+.kv>span{min-width:0;overflow-wrap:anywhere}
+.kv b{font:500 .7rem 'Fira Code',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding-top:4px}
+.codigo{font:600 1.1rem 'Fira Code',monospace;color:var(--navy);letter-spacing:.08em;background:#fff;border:1px dashed var(--navy);border-radius:8px;padding:4px 10px;display:inline-block}
+#informe{background:#fff}
+#infResumen{padding:18px 22px;background:#fff}
+.inf-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;border-bottom:2px solid var(--navy);padding-bottom:8px;margin-bottom:10px}
+.inf-head .t1{font-family:'Fraunces',serif;font-size:1.3rem;color:var(--navy)}
+.inf-head .t2{font-size:.85rem;color:var(--muted)}
+.fotopag{page-break-before:always;padding:14px 0}
+.fotopag .fh{font:500 .75rem 'Fira Code',monospace;color:var(--muted);margin-bottom:6px}
+.fotopag img{max-width:100%;max-height:900px;border:1px solid var(--line)}
+.modal-bg{position:fixed;inset:0;background:rgba(15,34,68,.45);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:14px;padding:20px 22px;max-width:440px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.modal h3{margin-top:0}
+@media print{
+  body{background:#fff}
+  .topbar,.site-footer,.barra,.no-print,.modal-bg{display:none !important}
+  main{max-width:none;padding:0}
+  .vista{display:none} #vResultados{display:block}
+  #vResultados > *:not(#informe){display:none}
+  #informe{display:block !important}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div>
+        <div class="brand-inspt">Escuela Philips</div>
+        <div class="brand-title">TP evaluado · Variables separables</div>
+        <div class="brand-sub">Matemática · 5.º año</div>
+      </div>
+    </div>
+    <div class="lab-logo">
+      <div class="lab-name"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div>
+      <div class="lab-sub">Prof. Ariel L. Cardozo Delgado</div>
+    </div>
+  </div>
+</header>
+
+<div class="barra" id="barra" style="display:none">
+  <div class="barra-inner">
+    <span class="quien" id="bQuien"></span>
+    <div class="track"><div class="fill" id="bFill"></div></div>
+    <span class="prog" id="bProg"></span>
+    <button class="btn small ghost" type="button" data-portada>Portada</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ================= PORTADA ================= -->
+<section id="vPortada" class="vista on">
+  <div class="hero">
+    <div class="sub">Trabajo práctico evaluado · Unidad 5</div>
+    <h1>Ecuaciones diferenciales de variables separables</h1>
+    <p class="lead">Diez ejercicios sorteados para vos, ordenados de menor a mayor dificultad: los cinco primeros se responden eligiendo la solución correcta entre seis opciones; los cinco siguientes se responden con un número. Hay ecuaciones sin condición inicial, con condición inicial y problemas de modelización física: enfriamiento y calentamiento según la ley de Newton, desintegración radiactiva, descarga de un capacitor, frenado y caída con rozamiento. Para cada uno resolvés en la hoja, cargás la respuesta, subís la foto del procedimiento y confirmás. Un solo intento por ejercicio.</p>
+  </div>
+
+  <div id="pForm">
+    <div class="card">
+      <h3 style="margin-top:0">Antes de empezar</h3>
+      <div class="form">
+        <div><label for="fNombre">Apellido y nombre</label><input id="fNombre" type="text" autocomplete="name" placeholder="Apellido, Nombre"></div>
+        <div><label for="fDiv">División</label><select id="fDiv"><option value="">elegí…</option><option>5.º ET</option><option>5.º FT</option></select></div>
+      </div>
+      <div class="nota" style="margin:12px 0">
+        <div class="tt">Vas a necesitar</div>
+        Hoja, lápiz, calculadora y la cámara del celular (o una imagen del desarrollo si trabajás en la computadora). Cada ejercicio pide al menos una foto de tu procedimiento manuscrito antes de confirmar; podés subir hasta cuatro por ejercicio si el desarrollo ocupa más de una hoja. El resultado sin desarrollo no vale.
+      </div>
+      <div class="warn" style="margin:12px 0">
+        <div class="tt">Cómo funciona</div>
+        Cada ejercicio tiene <b>un solo intento</b>: al confirmar queda congelado y ves la corrección con la resolución completa. Al terminar los diez descargás el informe en PDF y lo subís a Classroom: <b>la actividad no se entrega sola</b>. Usá el mismo dispositivo y el mismo navegador de principio a fin, porque el avance se guarda ahí. Podés reiniciar, pero el número de intento queda impreso en el informe.
+      </div>
+      <div class="acciones">
+        <button class="btn" type="button" id="btnComenzar">Comenzar la actividad</button>
+        <span class="estado" id="pIntentos"></span>
+      </div>
+      <div class="fb bad" id="pErr"></div>
+    </div>
+  </div>
+
+  <div id="pEnCurso" style="display:none">
+    <div class="card">
+      <h3 style="margin-top:0">Tenés una actividad en curso</h3>
+      <div class="kv" id="pResumenCurso"></div>
+      <div class="acciones">
+        <button class="btn" type="button" data-volver>Volver a la actividad</button>
+        <button class="btn ghost" type="button" data-reiniciar>Reiniciar desde cero</button>
+      </div>
+    </div>
+  </div>
+
+  <h3>Qué tiene que verse en la hoja</h3>
+  <div class="def">
+    Todos los ejercicios son ecuaciones diferenciales de primer orden de <b>variables separables</b>: la ecuación se puede escribir como \(g(y)\,dy = f(x)\,dx\). En la hoja tiene que verse el procedimiento completo: la separación, las dos integrales con su resultado, el despeje (cuando se pide la función) y, si hay condición inicial, el reemplazo del punto dado y el valor de la constante. En los problemas de modelización, además, la lectura del enunciado: qué es cada letra, cuál es la condición inicial y, cuando la ley trae una constante desconocida (como la \(K\) de Newton), con qué dato se calcula: primero \(A\) con \(t = 0\), después \(K\) con el otro dato.
+  </div>
+  <ol class="metodo">
+    <li><b>Separar.</b> Todo lo que tiene \(y\) con \(dy\) de un lado; todo lo que tiene \(x\) (o \(t\)) con \(dx\) del otro.</li>
+    <li><b>Integrar</b> cada lado, con una sola constante \(C\).</li>
+    <li><b>Despejar</b> \(y\) si se puede. Si queda \(\ln|y|\), aplicar \(e\) y absorber la constante en \(K = \pm e^{C}\).</li>
+    <li><b>Condición inicial.</b> Reemplazar el punto dado en la solución general y calcular la constante.</li>
+    <li><b>Comprobar.</b> Derivar la solución y ver que cumple la ecuación; en los modelos, controlar el valor inicial y hacia dónde tiende.</li>
+  </ol>
+  <div class="nota">
+    <div class="tt">Cómo se puntúa</div>
+    Los cinco primeros ejercicios valen <b>8 puntos</b> cada uno (opción múltiple, seis opciones, una sola correcta). Los cinco siguientes valen <b>12 puntos</b> cada uno (respuesta numérica). En total, 100. En los de respuesta numérica el resultado se escribe con dos decimales, con coma o con punto (por ejemplo 3,47 o 3.47); si es una fracción exacta también vale escribirla con barra (1/2).
+  </div>
+</section>
+
+<!-- ================= ACTIVIDAD ================= -->
+<section id="vActividad" class="vista">
+  <div class="badge">Tu actividad</div>
+  <h2>Diez ejercicios, un intento cada uno</h2>
+  <p class="lead">Resolvé en la hoja, cargá tu respuesta, subí la foto del procedimiento y confirmá. Después de confirmar podés abrir la resolución completa.</p>
+  <div id="lista"></div>
+  <div class="card no-print" id="cierre">
+    <h3 style="margin-top:0">Cuando termines los diez</h3>
+    <p id="cierreTxt"></p>
+    <div class="acciones"><button class="btn green" type="button" id="btnResultados" disabled>Ver resultados y descargar el informe</button></div>
+  </div>
+</section>
+
+<!-- ================= RESULTADOS ================= -->
+<section id="vResultados" class="vista">
+  <div class="badge no-print">Resultados</div>
+  <h2 class="no-print">Tu informe</h2>
+  <div class="card no-print">
+    <p>Descargá el PDF y subilo a la tarea de Classroom. El archivo lleva tu nombre, el número de intento, la combinación de ejercicios que te tocó y un código de verificación: no lo edites.</p>
+    <div class="acciones">
+      <button class="btn green" type="button" id="btnPDF">Descargar el informe en PDF</button>
+      <button class="btn sec" type="button" id="btnPrint">Imprimir / guardar manual</button>
+      <button class="btn ghost" type="button" data-portada>Volver a la portada</button>
+    </div>
+    <div class="fb info" id="pdfMsg"></div>
+  </div>
+  <div id="informe" class="card" style="padding:0;overflow:hidden">
+    <div id="infResumen"></div>
+    <div id="infFotos"></div>
+  </div>
+</section>
+
+</main>
+
+<div class="modal-bg" id="modalReset">
+  <div class="modal">
+    <h3>¿Reiniciar la actividad?</h3>
+    <p>Se borran tus respuestas, las fotos y el sorteo; te tocan diez ejercicios nuevos. El contador de intentos <b>no</b> se borra: el informe va a decir "Intento N.º <span id="mIntento"></span>".</p>
+    <div class="acciones"><button class="btn rust" type="button" id="doReset">Sí, reiniciar</button><button class="btn ghost" type="button" id="closeReset">Cancelar</button></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-quote">"La matemática no exige genios, exige constancia."</div>
+    <div class="footer-lab">
+      <div class="lab-name"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div>
+      <div class="lab-sub">Prof. Ariel L. Cardozo Delgado</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+var BANCO=[{"id": "m01", "nivel": "medio", "sub": "libre", "titulo": "Separar y despejar", "enun": "Resolvé \\(y' = 4x^3\\,y\\). ¿Cuál es la solución general?", "opts": ["\\(y = K\\,e^{x^4}\\)", "\\(y = x^4 + C\\)", "\\(y = e^{x^4} + C\\)", "\\(y = K\\,e^{4x^3}\\)", "\\(y = K\\,x^4\\)", "\\(y = K\\,e^{-x^4}\\)"], "correct": 0, "fbOk": "Bien: \\(\\ln|y| = x^4 + C\\), y al despejar la constante pasa a multiplicar.", "pasos": [{"t": "Separar", "h": "<p>Es separable: un factor con \\(x\\) por otro con \\(y\\).</p>\\[\\dfrac{dy}{dx} = 4x^3\\,y \\quad\\Rightarrow\\quad \\dfrac{dy}{y} = 4x^3\\,dx\\]<p>Dividimos por \\(y\\) (suponemos \\(y \\ne 0\\); el caso \\(y = 0\\) lo recuperamos al final).</p>"}, {"t": "Integrar cada lado", "h": "\\[\\int \\dfrac{dy}{y} = \\int 4x^3\\,dx \\quad\\Rightarrow\\quad \\ln|y| = x^4 + C\\]<p>Una sola constante: las dos se juntan en \\(C\\).</p>"}, {"t": "Despejar y absorber la constante", "h": "\\[|y| = e^{x^4 + C} = e^{C}\\cdot e^{x^4} \\quad\\Rightarrow\\quad y = K\\,e^{x^4}\\]<p>con \\(K = \\pm e^{C}\\). Con \\(K = 0\\) queda \\(y = 0\\), que también cumple la ecuación.</p><div class=\\\"calc-final\\\">Solución general: \\(y = K\\,e^{x^4}\\)</div><p>Comprobación: \\(y' = K\\,e^{x^4}\\cdot 4x^3 = 4x^3\\,y\\). ✓</p>"}]}, {"id": "m02", "nivel": "medio", "sub": "libre", "titulo": "Dos logaritmos", "enun": "Resolvé \\(y' = -\\dfrac{y}{x}\\) para \\(x > 0\\). ¿Cuál es la solución general?", "opts": ["\\(y = K\\,x\\)", "\\(y = \\dfrac{K}{x}\\)", "\\(y = -\\ln|x| + C\\)", "\\(y = K\\,e^{-x}\\)", "\\(y = -x + C\\)", "\\(y = \\dfrac{K}{x^2}\\)"], "correct": 1, "fbOk": "Bien: \\(\\ln|y| = -\\ln x + C\\), y al aplicar \\(e\\) queda \\(y = \\dfrac{K}{x}\\).", "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dy}{dx} = -\\dfrac{y}{x} \\quad\\Rightarrow\\quad \\dfrac{dy}{y} = -\\dfrac{dx}{x}\\]"}, {"t": "Integrar cada lado", "h": "\\[\\int \\dfrac{dy}{y} = -\\int \\dfrac{dx}{x} \\quad\\Rightarrow\\quad \\ln|y| = -\\ln x + C\\]<p>Los dos lados dan logaritmos.</p>"}, {"t": "Despejar", "h": "\\[|y| = e^{-\\ln x + C} = e^{C}\\cdot e^{-\\ln x} = e^{C}\\cdot \\dfrac{1}{x}\\]<p>porque \\(e^{-\\ln x} = \\dfrac{1}{x}\\). Con \\(K = \\pm e^{C}\\):</p><div class=\\\"calc-final\\\">Solución general: \\(y = \\dfrac{K}{x}\\)</div><p>Comprobación: \\(y' = -\\dfrac{K}{x^2}\\) y \\(-\\dfrac{y}{x} = -\\dfrac{K}{x^2}\\). ✓ Es la familia de hipérbolas; \\(y = K\\,x\\) resolvería \\(y' = +\\dfrac{y}{x}\\).</p>"}]}, {"id": "m03", "nivel": "medio", "sub": "libre", "titulo": "Solución en forma implícita", "enun": "Resolvé \\(y' = \\dfrac{x}{y^2}\\). ¿Cuál es la solución general?", "opts": ["\\(y^3 = x^2 + K\\)", "\\(y^2 = \\dfrac{x^3}{3} + K\\)", "\\(2y^3 = 3x^2 + K\\)", "\\(y = \\dfrac{x^2}{2y^2} + C\\)", "\\(y^3 = \\dfrac{3x^2}{2}\\)", "\\(3y^3 = 2x^2 + K\\)"], "correct": 2, "fbOk": "Bien: \\(y^2\\,dy = x\\,dx\\) da \\(\\dfrac{y^3}{3} = \\dfrac{x^2}{2} + C\\), y multiplicando por \\(6\\) queda \\(2y^3 = 3x^2 + K\\).", "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dy}{dx} = \\dfrac{x}{y^2} \\quad\\Rightarrow\\quad y^2\\,dy = x\\,dx\\]<p>La \\(y^2\\) que dividía pasa multiplicando al lado de \\(dy\\).</p>"}, {"t": "Integrar cada lado", "h": "\\[\\int y^2\\,dy = \\int x\\,dx \\quad\\Rightarrow\\quad \\dfrac{y^3}{3} = \\dfrac{x^2}{2} + C\\]"}, {"t": "Ordenar", "h": "<p>Multiplicamos todo por \\(6\\), múltiplo común de los denominadores, y llamamos \\(K = 6C\\):</p>\\[2y^3 = 3x^2 + K\\]<div class=\\\"calc-final\\\">Solución general: \\(2y^3 = 3x^2 + K\\)</div><p>Queda en forma implícita; es una respuesta completa. Sin la constante (\\(y^3 = \\dfrac{3x^2}{2}\\)) sería una sola curva, no la familia.</p>"}]}, {"id": "m04", "nivel": "medio", "sub": "libre", "titulo": "Un exponente que se parte", "enun": "Resolvé \\(y' = e^{\\,x - y}\\). ¿Cuál es la solución general?", "opts": ["\\(y = \\ln\\!\\left(e^{x} + C\\right)\\)", "\\(y = e^{x} + C\\)", "\\(y = -\\ln\\!\\left(e^{-x} + C\\right)\\)", "\\(y = \\ln\\!\\left(e^{x}\\right) + C\\)", "\\(y = -\\ln\\!\\left(e^{x} + C\\right)\\)", "\\(y = K\\,e^{x}\\)"], "correct": 0, "fbOk": "Bien: \\(e^{x - y} = e^{x}\\cdot e^{-y}\\) se separa, \\(e^{y} = e^{x} + C\\), y se despeja con \\(\\ln\\).", "pasos": [{"t": "Reconocer el producto", "h": "<p>Por propiedad de las potencias, \\(e^{x - y} = e^{x}\\cdot e^{-y}\\): un factor solo de \\(x\\) por otro solo de \\(y\\). Es separable.</p>\\[\\dfrac{dy}{dx} = e^{x}\\cdot e^{-y} \\quad\\Rightarrow\\quad e^{y}\\,dy = e^{x}\\,dx\\]<p>Dividir por \\(e^{-y}\\) es multiplicar por \\(e^{y}\\).</p>"}, {"t": "Integrar cada lado", "h": "\\[\\int e^{y}\\,dy = \\int e^{x}\\,dx \\quad\\Rightarrow\\quad e^{y} = e^{x} + C\\]"}, {"t": "Despejar", "h": "<p>Aplicamos \\(\\ln\\) a los dos lados:</p><div class=\\\"calc-final\\\">Solución general: \\(y = \\ln\\!\\left(e^{x} + C\\right)\\)</div><p>Comprobación: \\(y' = \\dfrac{e^{x}}{e^{x} + C}\\) y \\(e^{x - y} = \\dfrac{e^{x}}{e^{y}} = \\dfrac{e^{x}}{e^{x} + C}\\). ✓ Ojo: \\(\\ln(e^{x} + C)\\) no es \\(x + C\\); el logaritmo no se reparte en la suma.</p>"}]}, {"id": "m05", "nivel": "medio", "sub": "libre", "titulo": "Con y al cuadrado", "enun": "Resolvé \\(y' = y^2\\cos x\\). ¿Cuál es la solución general?", "opts": ["\\(y = \\dfrac{1}{K - \\operatorname{sen} x}\\)", "\\(y = K\\,e^{\\operatorname{sen} x}\\)", "\\(y = \\operatorname{sen} x + C\\)", "\\(y = \\dfrac{1}{\\operatorname{sen} x} + C\\)", "\\(y = \\dfrac{y^3}{3}\\cos x + C\\)", "\\(y = \\dfrac{1}{K + \\cos x}\\)"], "correct": 0, "fbOk": "Bien: \\(\\dfrac{dy}{y^2} = \\cos x\\,dx\\) da \\(-\\dfrac{1}{y} = \\operatorname{sen} x + C\\), y al despejar queda \\(y = \\dfrac{1}{K - \\operatorname{sen} x}\\).", "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dy}{dx} = y^2\\cos x \\quad\\Rightarrow\\quad \\dfrac{dy}{y^2} = \\cos x\\,dx\\]<p>Suponemos \\(y \\ne 0\\) (y \\(y = 0\\) también es solución, aparte).</p>"}, {"t": "Integrar cada lado", "h": "\\[\\int y^{-2}\\,dy = \\int \\cos x\\,dx \\quad\\Rightarrow\\quad \\dfrac{y^{-1}}{-1} = \\operatorname{sen} x + C \\quad\\Rightarrow\\quad -\\dfrac{1}{y} = \\operatorname{sen} x + C\\]<p>La integral de \\(y^{-2}\\) es \\(\\dfrac{y^{-1}}{-1}\\), no un logaritmo: el logaritmo es solo para \\(y^{-1}\\).</p>"}, {"t": "Despejar", "h": "\\[\\dfrac{1}{y} = -\\operatorname{sen} x - C \\quad\\Rightarrow\\quad y = \\dfrac{1}{-\\operatorname{sen} x - C}\\]<p>Llamando \\(K = -C\\):</p><div class=\\\"calc-final\\\">Solución general: \\(y = \\dfrac{1}{K - \\operatorname{sen} x}\\)</div><p>Comprobación: \\(y' = \\dfrac{\\cos x}{(K - \\operatorname{sen} x)^2} = y^2\\cos x\\). ✓</p>"}]}, {"id": "m06", "nivel": "medio", "sub": "libre", "titulo": "Un polinomio del lado de x", "enun": "Resolvé \\(y' = \\dfrac{2x + 1}{y}\\). ¿Cuál es la solución general?", "opts": ["\\(y^2 = x^2 + x + K\\)", "\\(y = \\dfrac{x^2 + x}{y} + C\\)", "\\(y^2 = 2x^2 + 2x + K\\)", "\\(y = \\sqrt{x^2 + x} + C\\)", "\\(y = K\\,e^{x^2 + x}\\)", "\\(\\dfrac{y^2}{2} = 2x + K\\)"], "correct": 2, "fbOk": "Bien: \\(y\\,dy = (2x + 1)\\,dx\\) da \\(\\dfrac{y^2}{2} = x^2 + x + C\\), y multiplicando por \\(2\\), \\(y^2 = 2x^2 + 2x + K\\).", "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dy}{dx} = \\dfrac{2x + 1}{y} \\quad\\Rightarrow\\quad y\\,dy = (2x + 1)\\,dx\\]"}, {"t": "Integrar cada lado", "h": "\\[\\int y\\,dy = \\int (2x + 1)\\,dx \\quad\\Rightarrow\\quad \\dfrac{y^2}{2} = x^2 + x + C\\]<p>Término a término: \\(\\displaystyle\\int 2x\\,dx = x^2\\) y \\(\\displaystyle\\int 1\\,dx = x\\).</p>"}, {"t": "Ordenar", "h": "<p>Multiplicamos por \\(2\\), con \\(K = 2C\\):</p><div class=\\\"calc-final\\\">Solución general: \\(y^2 = 2x^2 + 2x + K\\)</div><p>El \\(2\\) multiplica a <i>todo</i> el lado derecho, no solo a \\(x^2\\). Comprobación: derivando, \\(2y\\,y' = 4x + 2\\), es decir \\(y' = \\dfrac{2x + 1}{y}\\). ✓</p>"}]}, {"id": "m07", "nivel": "medio", "sub": "ci", "titulo": "Problema de valor inicial", "enun": "Resolvé \\(y' = 4y\\) con \\(y(0) = 3\\). ¿Cuál es la solución particular?", "opts": ["\\(y = 4\\,e^{3x}\\)", "\\(y = 3\\,e^{4x}\\)", "\\(y = e^{4x} + 2\\)", "\\(y = 3\\,e^{-4x}\\)", "\\(y = 12x + 3\\)", "\\(y = e^{4x} + 3\\)"], "correct": 1, "fbOk": "Bien: general \\(y = K\\,e^{4x}\\), y \\(y(0) = 3\\) da \\(K = 3\\).", "pasos": [{"t": "Solución general", "h": "\\[\\dfrac{dy}{y} = 4\\,dx \\quad\\Rightarrow\\quad \\ln|y| = 4x + C \\quad\\Rightarrow\\quad y = K\\,e^{4x}\\]<p>Primero la general, con su constante.</p>"}, {"t": "Usar la condición inicial", "h": "<p>\\(y(0) = 3\\): reemplazamos \\(x = 0\\), \\(y = 3\\) en la general.</p>\\[3 = K\\,e^{0} = K \\quad\\Rightarrow\\quad K = 3\\]"}, {"t": "Escribir la particular", "h": "<div class=\\\"calc-final\\\">Solución particular: \\(y = 3\\,e^{4x}\\)</div><p>Comprobación: \\(y' = 12\\,e^{4x} = 4y\\) y \\(y(0) = 3\\). ✓ \\(e^{4x} + 2\\) pasa por \\((0\\,;\\,3)\\) pero no cumple la ecuación: \\(y' = 4e^{4x}\\) y \\(4y = 4e^{4x} + 8\\).</p>"}]}, {"id": "m08", "nivel": "medio", "sub": "ci", "titulo": "Valor inicial con x en el factor", "enun": "Resolvé \\(y' = -2x\\,y\\) con \\(y(0) = 5\\). ¿Cuál es la solución particular?", "opts": ["\\(y = 5\\,e^{x^2}\\)", "\\(y = 5 - x^2\\)", "\\(y = 5\\,e^{-x^2}\\)", "\\(y = e^{-x^2} + 4\\)", "\\(y = 5\\,e^{-2x}\\)", "\\(y = -5x^2 + 5\\)"], "correct": 2, "fbOk": "Bien: \\(\\ln|y| = -x^2 + C\\), general \\(y = K\\,e^{-x^2}\\), y \\(y(0) = 5\\) da \\(K = 5\\).", "pasos": [{"t": "Solución general", "h": "\\[\\dfrac{dy}{y} = -2x\\,dx \\quad\\Rightarrow\\quad \\ln|y| = -x^2 + C \\quad\\Rightarrow\\quad y = K\\,e^{-x^2}\\]<p>\\(\\displaystyle\\int -2x\\,dx = -x^2\\): el exponente queda con \\(x^2\\), no con \\(x\\).</p>"}, {"t": "Usar la condición inicial", "h": "\\[y(0) = K\\,e^{0} = K = 5\\]"}, {"t": "Escribir la particular", "h": "<div class=\\\"calc-final\\\">Solución particular: \\(y = 5\\,e^{-x^2}\\)</div><p>Comprobación: \\(y' = 5\\,e^{-x^2}\\cdot(-2x) = -2x\\,y\\) y \\(y(0) = 5\\). ✓ Es una campana que baja a \\(0\\) hacia los dos lados.</p>"}]}, {"id": "m09", "nivel": "medio", "sub": "ci", "titulo": "Valor inicial en forma implícita", "enun": "Resolvé \\(y' = \\dfrac{2x}{y}\\) con \\(y(0) = 1\\). ¿Cuál es la solución particular?", "opts": ["\\(y^2 = 2x^2 + 1\\)", "\\(y^2 = x^2 + 1\\)", "\\(y = x^2 + 1\\)", "\\(y^2 = 2x^2\\)", "\\(y = 2x + 1\\)", "\\(y^2 = 2x^2 - 1\\)"], "correct": 0, "fbOk": "Bien: \\(y\\,dy = 2x\\,dx\\) da \\(y^2 = 2x^2 + K\\), y el punto \\((0\\,;\\,1)\\) fija \\(K = 1\\).", "pasos": [{"t": "Solución general", "h": "\\[y\\,dy = 2x\\,dx \\quad\\Rightarrow\\quad \\dfrac{y^2}{2} = x^2 + C \\quad\\Rightarrow\\quad y^2 = 2x^2 + K\\]<p>con \\(K = 2C\\). Queda implícita.</p>"}, {"t": "Usar la condición inicial", "h": "<p>Reemplazamos \\(x = 0\\), \\(y = 1\\):</p>\\[1^2 = 2\\cdot 0^2 + K \\quad\\Rightarrow\\quad K = 1\\]"}, {"t": "Escribir la particular", "h": "<div class=\\\"calc-final\\\">Solución particular: \\(y^2 = 2x^2 + 1\\)</div><p>Como \\(y(0) = 1 > 0\\), la rama es \\(y = \\sqrt{2x^2 + 1}\\). Comprobación: \\(2y\\,y' = 4x\\), es decir \\(y' = \\dfrac{2x}{y}\\). ✓</p>"}]}, {"id": "m10", "nivel": "medio", "sub": "mod", "titulo": "Hallar la constante de Newton", "enun": "Un objeto a \\(90\\,{}^{\\circ}\\text{C}\\) se deja enfriar en una habitación cuya temperatura es constante, \\(20\\,{}^{\\circ}\\text{C}\\). A los \\(10\\) minutos el objeto está a \\(55\\,{}^{\\circ}\\text{C}\\). Su temperatura cumple la ley de enfriamiento de Newton, \\(\\dfrac{dT}{dt} = K\\,(T - 20)\\), con \\(t\\) en minutos. ¿Cuánto vale <span style=\"white-space:nowrap\">\\(K\\)?</span>", "opts": ["\\(K = \\dfrac{\\ln 2}{10}\\)", "\\(K = \\dfrac{\\ln\\!\\left(\\dfrac{1}{2}\\right)}{10}\\)", "\\(K = 10\\,\\ln\\!\\left(\\dfrac{1}{2}\\right)\\)", "\\(K = \\dfrac{\\ln\\!\\left(\\dfrac{55}{90}\\right)}{10}\\)", "\\(K = \\dfrac{\\ln\\!\\left(\\dfrac{1}{2}\\right)}{70}\\)", "\\(K = -\\dfrac{7}{2}\\)"], "correct": 1, "fbOk": "Bien: \\(T = 20 + 70\\,e^{Kt}\\), y el dato \\(T(10) = 55\\) da \\(e^{10K} = \\dfrac{35}{70} = \\dfrac{1}{2}\\), así que \\(K = \\dfrac{\\ln\\left(\\frac{1}{2}\\right)}{10} \\approx -0{,}069\\).", "pasos": [{"t": "Separar e integrar", "h": "\\[\\dfrac{dT}{T - 20} = K\\,dt \\quad\\Rightarrow\\quad \\ln|T - 20| = K\\,t + C\\]<p>Como el objeto está más caliente que el ambiente, \\(T - 20 > 0\\) y se puede sacar el valor absoluto.</p>"}, {"t": "Despejar la solución general", "h": "\\[T - 20 = e^{C}\\,e^{Kt} = A\\,e^{Kt} \\quad\\Rightarrow\\quad T(t) = 20 + A\\,e^{Kt}\\]<p>Quedan dos constantes: \\(A\\), de la integración, y \\(K\\), la de la ley. Hacen falta dos datos.</p>"}, {"t": "Hallar A con t = 0", "h": "\\[T(0) = 20 + A\\,e^{0} = 20 + A = 90 \\quad\\Rightarrow\\quad A = 70\\]<p>\\(A\\) es la diferencia inicial con el ambiente, \\(90 - 20\\), no \\(90\\).</p>"}, {"t": "Hallar K con t = 10", "h": "\\[T(10) = 20 + 70\\,e^{10K} = 55 \\quad\\Rightarrow\\quad 70\\,e^{10K} = 35 \\quad\\Rightarrow\\quad e^{10K} = \\dfrac{35}{70} = \\dfrac{1}{2}\\]\\[10K = \\ln\\!\\left(\\dfrac{1}{2}\\right) \\quad\\Rightarrow\\quad K = \\dfrac{\\ln\\!\\left(\\dfrac{1}{2}\\right)}{10} \\approx \\dfrac{-0{,}693}{10} \\approx -0{,}069\\]<div class=\\\"calc-final\\\">\\(K = \\dfrac{\\ln\\left(\\frac{1}{2}\\right)}{10} \\approx -0{,}069\\) por minuto</div><p>Control: \\(K < 0\\), como corresponde a un enfriamiento. El \\(10\\) que multiplica a \\(K\\) pasa dividiendo, no multiplicando; y el cociente es \\(\\dfrac{35}{70}\\) (diferencias con el ambiente), no \\(\\dfrac{55}{90}\\).</p>"}]}, {"id": "m11", "nivel": "medio", "sub": "mod", "titulo": "Desintegración radiactiva", "enun": "Una muestra de \\(400\\) mg de un isótopo radiactivo se desintegra a un ritmo proporcional a la cantidad presente: \\(\\dfrac{dN}{dt} = -0{,}05\\,N\\), con \\(t\\) en años. ¿Cuál es <span style=\"white-space:nowrap\">\\(N(t)\\)?</span>", "opts": ["\\(N = 400\\,e^{0{,}05t}\\)", "\\(N = 400 - 0{,}05\\,t\\)", "\\(N = 400\\,e^{-0{,}05t}\\)", "\\(N = e^{-0{,}05t} + 399\\)", "\\(N = 400\\,e^{-20t}\\)", "\\(N = -0{,}05\\,e^{400t}\\)"], "correct": 2, "fbOk": "Bien: \\(N = A\\,e^{-0{,}05t}\\) y \\(N(0) = 400\\) da \\(A = 400\\). La cantidad decrece.", "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dN}{N} = -0{,}05\\,dt\\]"}, {"t": "Integrar cada lado", "h": "\\[\\ln N = -0{,}05\\,t + C\\]<p>Como \\(N > 0\\), no hace falta el valor absoluto.</p>"}, {"t": "Despejar", "h": "\\[N = e^{C}\\cdot e^{-0{,}05t} = A\\,e^{-0{,}05t}\\]"}, {"t": "Usar la condición inicial", "h": "\\[N(0) = A = 400\\]<div class=\\\"calc-final\\\">\\(N(t) = 400\\,e^{-0{,}05t}\\)</div><p>Comprobación: \\(N' = -20\\,e^{-0{,}05t} = -0{,}05\\,N\\). ✓ Una recta no sirve: el ritmo cambia con lo que queda. Y el signo negativo del exponente es el que hace decrecer.</p>"}]}, {"id": "m12", "nivel": "medio", "sub": "mod", "titulo": "Una pieza que se calienta", "enun": "Una pieza de acero a \\(10\\,{}^{\\circ}\\text{C}\\) se mete en un horno cuya temperatura es constante, \\(190\\,{}^{\\circ}\\text{C}\\). A los \\(4\\) minutos la pieza está a \\(70\\,{}^{\\circ}\\text{C}\\). La ley de Newton da \\(\\dfrac{dT}{dt} = K\\,(T - 190)\\), cuya solución general es \\(T(t) = 190 + A\\,e^{Kt}\\). ¿Cuánto vale <span style=\"white-space:nowrap\">\\(A\\)?</span>", "opts": ["\\(A = 180\\)", "\\(A = 10\\)", "\\(A = -120\\)", "\\(A = -180\\)", "\\(A = 190\\)", "\\(A = 60\\)"], "correct": 3, "fbOk": "Bien: \\(T(0) = 190 + A = 10\\) da \\(A = -180\\): negativo porque la pieza arranca por debajo del horno.", "pasos": [{"t": "De dónde sale la solución general", "h": "\\[\\dfrac{dT}{T - 190} = K\\,dt \\quad\\Rightarrow\\quad \\ln|T - 190| = K\\,t + C \\quad\\Rightarrow\\quad T - 190 = A\\,e^{Kt}\\]<p>con \\(A = \\pm e^{C}\\). Acá \\(T < 190\\), así que \\(T - 190\\) es negativo y \\(A\\) va a salir negativo.</p>"}, {"t": "Usar t = 0", "h": "<p>Para \\(A\\) se usa siempre el dato en \\(t = 0\\), porque ahí \\(e^{K\\cdot 0} = 1\\) y \\(K\\) desaparece:</p>\\[T(0) = 190 + A\\cdot 1 = 10 \\quad\\Rightarrow\\quad A = 10 - 190 = -180\\]<div class=\\\"calc-final\\\">\\(A = -180\\)</div>"}, {"t": "Qué queda para después", "h": "<p>Con \\(A\\) conocido, el dato \\(T(4) = 70\\) sirve para hallar \\(K\\): \\(190 - 180\\,e^{4K} = 70\\), es decir \\(e^{4K} = \\dfrac{120}{180} = \\dfrac{2}{3}\\) y \\(K = \\dfrac{\\ln\\left(\\frac{2}{3}\\right)}{4} \\approx -0{,}10\\). Usar primero \\(t = 4\\) deja una ecuación con dos incógnitas; por eso el orden es \\(A\\) primero, \\(K\\) después.</p>"}]}, {"id": "m13", "nivel": "medio", "sub": "mod", "titulo": "Descarga de un capacitor", "enun": "Un capacitor de \\(C = 0{,}003\\ \\text{F}\\) con carga inicial \\(q_0 = 0{,}06\\) coulomb se descarga a través de una resistencia de \\(R = 1000\\ \\Omega\\). Su carga cumple \\(\\dfrac{dq}{dt} = -\\dfrac{q}{RC}\\), con \\(t\\) en segundos (acá \\(C\\) es la capacidad; a la constante de integración la llamamos \\(A\\)). ¿Cuál es <span style=\"white-space:nowrap\">\\(q(t)\\)?</span>", "opts": ["\\(q = 0{,}06\\,e^{-3t}\\)", "\\(q = 0{,}06\\,e^{-\\frac{t}{3}}\\)", "\\(q = 3\\,e^{-0{,}06t}\\)", "\\(q = 0{,}06 - \\dfrac{t}{3}\\)", "\\(q = 0{,}06\\,e^{\\frac{t}{3}}\\)", "\\(q = e^{-\\frac{t}{3}} + 0{,}06\\)"], "correct": 1, "fbOk": "Bien: \\(RC = 3\\ \\text{s}\\), \\(q = A\\,e^{-\\frac{t}{3}}\\) y \\(q(0) = 0{,}06\\) fija \\(A\\).", "pasos": [{"t": "Calcular RC y escribir la ecuación", "h": "\\[RC = 1000\\cdot 0{,}003 = 3\\ \\text{s} \\quad\\Rightarrow\\quad \\dfrac{dq}{dt} = -\\dfrac{q}{3}\\]"}, {"t": "Separar e integrar", "h": "\\[\\dfrac{dq}{q} = -\\dfrac{1}{3}\\,dt \\quad\\Rightarrow\\quad \\ln q = -\\dfrac{t}{3} + \\ln A\\]<p>Como \\(q > 0\\), no hace falta el valor absoluto. A la constante de integración la escribimos como \\(\\ln A\\) para no confundirla con la capacidad \\(C\\).</p>"}, {"t": "Despejar", "h": "\\[q = e^{\\ln A}\\cdot e^{-\\frac{t}{3}} = A\\,e^{-\\frac{t}{3}}\\]"}, {"t": "Usar la condición inicial", "h": "\\[q(0) = A = 0{,}06\\]<div class=\\\"calc-final\\\">\\(q(t) = 0{,}06\\,e^{-\\frac{t}{3}}\\)</div><p>El exponente es \\(-\\dfrac{t}{RC}\\): \\(RC\\) divide a \\(t\\), no lo multiplica. En \\(t = 3\\ \\text{s}\\) la carga cae al \\(37\\,\\%\\) de la inicial.</p>"}]}, {"id": "m14", "nivel": "medio", "sub": "mod", "titulo": "Predecir con la ley de Newton", "enun": "Una olla con agua a \\(80\\,{}^{\\circ}\\text{C}\\) queda sobre la mesada de una cocina cuya temperatura es constante, \\(20\\,{}^{\\circ}\\text{C}\\). A los \\(5\\) minutos el agua está a \\(60\\,{}^{\\circ}\\text{C}\\). Según la ley de enfriamiento de Newton, \\(\\dfrac{dT}{dt} = K\\,(T - 20)\\), ¿qué temperatura tiene el agua a los \\(10\\) minutos?", "opts": ["\\(T(10) = 40\\,{}^{\\circ}\\text{C}\\)", "\\(T(10) \\approx 26{,}67\\,{}^{\\circ}\\text{C}\\)", "\\(T(10) \\approx 46{,}67\\,{}^{\\circ}\\text{C}\\)", "\\(T(10) \\approx 55{,}56\\,{}^{\\circ}\\text{C}\\)", "\\(T(10) = 50\\,{}^{\\circ}\\text{C}\\)", "\\(T(10) = 60\\,{}^{\\circ}\\text{C}\\)"], "correct": 2, "fbOk": "Bien: \\(e^{5K} = \\dfrac{40}{60} = \\dfrac{2}{3}\\), así que \\(e^{10K} = \\left(\\dfrac{2}{3}\\right)^2 = \\dfrac{4}{9}\\) y \\(T(10) = 20 + 60\\cdot\\dfrac{4}{9} \\approx 46{,}67\\).", "pasos": [{"t": "Solución general", "h": "\\[\\dfrac{dT}{T - 20} = K\\,dt \\quad\\Rightarrow\\quad \\ln|T - 20| = K\\,t + C \\quad\\Rightarrow\\quad T(t) = 20 + A\\,e^{Kt}\\]"}, {"t": "Hallar A con t = 0", "h": "\\[T(0) = 20 + A = 80 \\quad\\Rightarrow\\quad A = 60\\]"}, {"t": "Hallar e elevado a 5K con t = 5", "h": "\\[T(5) = 20 + 60\\,e^{5K} = 60 \\quad\\Rightarrow\\quad 60\\,e^{5K} = 40 \\quad\\Rightarrow\\quad e^{5K} = \\dfrac{40}{60} = \\dfrac{2}{3}\\]<p>No hace falta calcular \\(K\\) con la calculadora: alcanza con saber cuánto vale \\(e^{5K}\\).</p>"}, {"t": "Evaluar en t = 10", "h": "\\[e^{10K} = e^{5K\\cdot 2} = \\left(e^{5K}\\right)^2 = \\left(\\dfrac{2}{3}\\right)^2 = \\dfrac{4}{9}\\]\\[T(10) = 20 + 60\\cdot\\dfrac{4}{9} = 20 + \\dfrac{240}{9} = 20 + 26{,}67 = 46{,}67\\]<div class=\\\"calc-final\\\">\\(T(10) \\approx 46{,}67\\,{}^{\\circ}\\text{C}\\)</div><p>Bajó \\(20\\,{}^{\\circ}\\text{C}\\) en los primeros \\(5\\) minutos y \\(13{,}33\\,{}^{\\circ}\\text{C}\\) en los siguientes: cada vez más despacio. Con una recta daría \\(40\\), que es el error típico.</p>"}]}, {"id": "m15", "nivel": "medio", "sub": "mod", "titulo": "Un trineo que se frena", "enun": "Un trineo se desliza sobre hielo a \\(6\\ \\text{m/s}\\) (el roce con el hielo se desprecia). El rozamiento con el aire lo frena con una fuerza proporcional a su velocidad, de modo que \\(\\dfrac{dv}{dt} = -0{,}2\\,v\\), con \\(t\\) en segundos. ¿Cuál es <span style=\"white-space:nowrap\">\\(v(t)\\)?</span>", "opts": ["\\(v = 6 - 0{,}2\\,t\\)", "\\(v = 6\\,e^{0{,}2t}\\)", "\\(v = 6\\,e^{-5t}\\)", "\\(v = 6\\,e^{-0{,}2t}\\)", "\\(v = e^{-0{,}2t} + 5\\)", "\\(v = 0{,}2\\,e^{-6t}\\)"], "correct": 3, "fbOk": "Bien: \\(v = A\\,e^{-0{,}2t}\\) con \\(A = v(0) = 6\\). La velocidad decrece pero nunca llega a cero.", "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dv}{v} = -0{,}2\\,dt\\]"}, {"t": "Integrar cada lado", "h": "\\[\\ln v = -0{,}2\\,t + C\\]<p>Como \\(v > 0\\), no hace falta el valor absoluto.</p>"}, {"t": "Despejar", "h": "\\[v = e^{C}\\cdot e^{-0{,}2t} = A\\,e^{-0{,}2t}\\]"}, {"t": "Usar la condición inicial", "h": "\\[v(0) = A = 6\\]<div class=\\\"calc-final\\\">\\(v(t) = 6\\,e^{-0{,}2t}\\)</div><p>Comprobación: \\(v' = -1{,}2\\,e^{-0{,}2t} = -0{,}2\\,v\\). ✓ \\(6 - 0{,}2t\\) sería un frenado con aceleración constante, y se detendría a los \\(30\\) s; con rozamiento proporcional a \\(v\\) el trineo frena cada vez menos.</p>"}]}, {"id": "a01", "nivel": "alto", "sub": "libre", "titulo": "Completar el exponente", "enun": "Resolvé \\(y' = 6x^2\\,y\\). La solución general tiene la forma \\(y = K\\,e^{\\,a\\,x^3}\\).", "forma": "y = K\\,e^{\\,a\\,x^3}", "label": "a =", "valor": 2.0, "tol": 0.011, "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dy}{y} = 6x^2\\,dx\\]"}, {"t": "Integrar cada lado", "h": "\\[\\ln|y| = \\int 6x^2\\,dx = 6\\cdot\\dfrac{x^3}{3} + C = 2x^3 + C\\]<p>El \\(6\\) se divide por el \\(3\\) que baja al integrar \\(x^2\\).</p>"}, {"t": "Despejar", "h": "\\[y = K\\,e^{2x^3}\\]<div class=\\\"calc-final\\\">\\(a = 2\\)</div><p>Comprobación: \\(y' = K\\,e^{2x^3}\\cdot 6x^2 = 6x^2\\,y\\). ✓ Escribir \\(e^{6x^3}\\) es olvidar el \\(\\dfrac{1}{3}\\) de la integral.</p>"}], "fbOk": "Bien: \\(\\displaystyle\\int 6x^2\\,dx = 2x^3\\), así que el exponente es \\(2x^3\\)."}, {"id": "a02", "nivel": "alto", "sub": "libre", "titulo": "Completar la solución implícita", "enun": "Resolvé \\(y' = \\dfrac{x}{y^3}\\). La solución general tiene la forma \\(y^4 = a\\,x^2 + K\\).", "forma": "y^4 = a\\,x^2 + K", "label": "a =", "valor": 2.0, "tol": 0.011, "pasos": [{"t": "Separar", "h": "\\[y^3\\,dy = x\\,dx\\]"}, {"t": "Integrar cada lado", "h": "\\[\\dfrac{y^4}{4} = \\dfrac{x^2}{2} + C\\]"}, {"t": "Ordenar", "h": "<p>Multiplicamos por \\(4\\): \\(y^4 = \\dfrac{4x^2}{2} + 4C = 2x^2 + K\\).</p><div class=\\\"calc-final\\\">\\(a = 2\\)</div><p>Comprobación: derivando \\(y^4 = 2x^2 + K\\), \\(4y^3\\,y' = 4x\\), es decir \\(y' = \\dfrac{x}{y^3}\\). ✓</p>"}], "fbOk": "Bien: \\(\\dfrac{y^4}{4} = \\dfrac{x^2}{2} + C\\), y al multiplicar por \\(4\\) el coeficiente de \\(x^2\\) es \\(2\\)."}, {"id": "a03", "nivel": "alto", "sub": "libre", "titulo": "Completar la potencia", "enun": "Resolvé \\(y' = \\dfrac{2y}{x + 1}\\) para \\(x > -1\\). La solución general tiene la forma \\(y = K\\,(x + 1)^{a}\\).", "forma": "y = K\\,(x + 1)^{a}", "label": "a =", "valor": 2.0, "tol": 0.011, "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dy}{y} = \\dfrac{2\\,dx}{x + 1}\\]"}, {"t": "Integrar cada lado", "h": "\\[\\ln|y| = 2\\ln(x + 1) + C\\]<p>\\(\\displaystyle\\int \\dfrac{dx}{x + 1} = \\ln|x + 1|\\), y el \\(2\\) sale afuera.</p>"}, {"t": "Despejar", "h": "\\[|y| = e^{2\\ln(x + 1) + C} = e^{C}\\cdot e^{\\ln (x + 1)^2} = e^{C}\\,(x + 1)^2\\]<p>porque \\(2\\ln(x + 1) = \\ln (x + 1)^2\\).</p><div class=\\\"calc-final\\\">\\(y = K\\,(x + 1)^2\\), es decir \\(a = 2\\)</div><p>Comprobación: \\(y' = 2K\\,(x + 1)\\) y \\(\\dfrac{2y}{x + 1} = 2K\\,(x + 1)\\). ✓</p>"}], "fbOk": "Bien: \\(2\\ln(x + 1)\\) se convierte en \\(\\ln (x + 1)^2\\), y al aplicar \\(e\\) queda la potencia \\(2\\)."}, {"id": "a04", "nivel": "alto", "sub": "libre", "titulo": "Completar antes de despejar", "enun": "Resolvé \\(y' = x\\,e^{-y}\\). La solución general, antes de despejar \\(y\\), tiene la forma \\(e^{y} = a\\,x^2 + C\\).", "forma": "e^{y} = a\\,x^2 + C", "label": "a =", "valor": 0.5, "tol": 0.011, "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dy}{e^{-y}} = x\\,dx \\quad\\Rightarrow\\quad e^{y}\\,dy = x\\,dx\\]<p>Dividir por \\(e^{-y}\\) es multiplicar por \\(e^{y}\\).</p>"}, {"t": "Integrar cada lado", "h": "\\[e^{y} = \\dfrac{x^2}{2} + C\\]<div class=\\\"calc-final\\\">\\(a = \\dfrac{1}{2} = 0{,}5\\)</div>"}, {"t": "Despejar (opcional)", "h": "\\[y = \\ln\\!\\left(\\dfrac{x^2}{2} + C\\right)\\]<p>Comprobación: \\(y' = \\dfrac{x}{\\frac{x^2}{2} + C} = \\dfrac{x}{e^{y}} = x\\,e^{-y}\\). ✓</p>"}], "fbOk": "Bien: \\(\\displaystyle\\int x\\,dx = \\dfrac{x^2}{2}\\), así que \\(a = 0{,}5\\)."}, {"id": "a05", "nivel": "alto", "sub": "libre", "titulo": "Completar la solución implícita", "enun": "Resolvé \\(y' = \\dfrac{3x^2}{2y}\\). La solución general tiene la forma \\(y^2 = a\\,x^3 + K\\).", "forma": "y^2 = a\\,x^3 + K", "label": "a =", "valor": 1.0, "tol": 0.011, "pasos": [{"t": "Separar", "h": "\\[2y\\,dy = 3x^2\\,dx\\]<p>El \\(2y\\) que dividía pasa multiplicando a \\(dy\\).</p>"}, {"t": "Integrar cada lado", "h": "\\[\\int 2y\\,dy = \\int 3x^2\\,dx \\quad\\Rightarrow\\quad y^2 = x^3 + K\\]<p>\\(\\displaystyle\\int 2y\\,dy = y^2\\) y \\(\\displaystyle\\int 3x^2\\,dx = x^3\\): los coeficientes se cancelan con los que bajan al integrar.</p><div class=\\\"calc-final\\\">\\(a = 1\\)</div>"}, {"t": "Comprobar", "h": "<p>Derivando \\(y^2 = x^3 + K\\): \\(2y\\,y' = 3x^2\\), es decir \\(y' = \\dfrac{3x^2}{2y}\\). ✓</p>"}], "fbOk": "Bien: \\(\\displaystyle\\int 2y\\,dy = y^2\\) y \\(\\displaystyle\\int 3x^2\\,dx = x^3\\), así que \\(a = 1\\)."}, {"id": "a06", "nivel": "alto", "sub": "libre", "titulo": "Completar el denominador", "enun": "Resolvé \\(y' = 4x\\,y^2\\). La solución general tiene la forma \\(y = \\dfrac{-1}{a\\,x^2 + C}\\).", "forma": "y = \\dfrac{-1}{a\\,x^2 + C}", "label": "a =", "valor": 2.0, "tol": 0.011, "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dy}{y^2} = 4x\\,dx\\]"}, {"t": "Integrar cada lado", "h": "\\[\\int y^{-2}\\,dy = \\int 4x\\,dx \\quad\\Rightarrow\\quad -\\dfrac{1}{y} = 2x^2 + C\\]<p>\\(\\displaystyle\\int y^{-2}\\,dy = \\dfrac{y^{-1}}{-1} = -\\dfrac{1}{y}\\), y \\(\\displaystyle\\int 4x\\,dx = 2x^2\\).</p>"}, {"t": "Despejar", "h": "\\[y = \\dfrac{-1}{2x^2 + C}\\]<div class=\\\"calc-final\\\">\\(a = 2\\)</div><p>Comprobación: \\(y' = \\dfrac{4x}{(2x^2 + C)^2} = 4x\\,y^2\\). ✓</p>"}], "fbOk": "Bien: \\(\\displaystyle\\int 4x\\,dx = 2x^2\\), así que \\(a = 2\\)."}, {"id": "a07", "nivel": "alto", "sub": "ci", "titulo": "Evaluar la solución particular", "enun": "Resolvé \\(y' = -4x\\,y\\) con \\(y(0) = 5\\), y calculá \\(y(1)\\). Escribí el resultado con dos decimales.", "forma": null, "label": "y(1) =", "valor": 0.6766764161830634, "tol": 0.015, "pasos": [{"t": "Solución general", "h": "\\[\\dfrac{dy}{y} = -4x\\,dx \\quad\\Rightarrow\\quad \\ln|y| = -2x^2 + C \\quad\\Rightarrow\\quad y = K\\,e^{-2x^2}\\]<p>\\(\\displaystyle\\int -4x\\,dx = -2x^2\\).</p>"}, {"t": "Usar la condición inicial", "h": "\\[y(0) = K = 5 \\quad\\Rightarrow\\quad y = 5\\,e^{-2x^2}\\]"}, {"t": "Evaluar en x = 1", "h": "\\[y(1) = 5\\,e^{-2} = \\dfrac{5}{e^2} \\approx \\dfrac{5}{7{,}389} \\approx 0{,}68\\]<div class=\\\"calc-final\\\">\\(y(1) \\approx 0{,}68\\)</div>"}], "fbOk": "Bien: \\(y = 5\\,e^{-2x^2}\\) y \\(y(1) = 5\\,e^{-2} \\approx 0{,}68\\)."}, {"id": "a08", "nivel": "alto", "sub": "ci", "titulo": "Evaluar una solución implícita", "enun": "Resolvé \\(y' = \\dfrac{2x}{y}\\) con \\(y(0) = 3\\), y calculá \\(y(2)\\). Escribí el resultado con dos decimales.", "forma": null, "label": "y(2) =", "valor": 4.123105625617661, "tol": 0.015, "pasos": [{"t": "Solución general", "h": "\\[y\\,dy = 2x\\,dx \\quad\\Rightarrow\\quad \\dfrac{y^2}{2} = x^2 + C \\quad\\Rightarrow\\quad y^2 = 2x^2 + K\\]"}, {"t": "Usar la condición inicial", "h": "\\[3^2 = 2\\cdot 0 + K \\quad\\Rightarrow\\quad K = 9 \\quad\\Rightarrow\\quad y^2 = 2x^2 + 9\\]<p>Como \\(y(0) = 3 > 0\\), tomamos la raíz positiva: \\(y = \\sqrt{2x^2 + 9}\\).</p>"}, {"t": "Evaluar en x = 2", "h": "\\[y(2) = \\sqrt{2\\cdot 4 + 9} = \\sqrt{17} \\approx 4{,}12\\]<div class=\\\"calc-final\\\">\\(y(2) \\approx 4{,}12\\)</div>"}], "fbOk": "Bien: \\(y^2 = 2x^2 + 9\\), y en \\(x = 2\\), \\(y = \\sqrt{17} \\approx 4{,}12\\)."}, {"id": "a09", "nivel": "alto", "sub": "ci", "titulo": "Una solución que se dispara", "enun": "Resolvé \\(y' = y^2\\) con \\(y(0) = 1\\), y calculá \\(y(0{,}5)\\).", "forma": null, "label": "y(0{,}5) =", "valor": 2.0, "tol": 0.011, "pasos": [{"t": "Solución general", "h": "\\[\\dfrac{dy}{y^2} = dx \\quad\\Rightarrow\\quad -\\dfrac{1}{y} = x + C \\quad\\Rightarrow\\quad y = \\dfrac{-1}{x + C}\\]"}, {"t": "Usar la condición inicial", "h": "\\[y(0) = \\dfrac{-1}{C} = 1 \\quad\\Rightarrow\\quad C = -1 \\quad\\Rightarrow\\quad y = \\dfrac{-1}{x - 1} = \\dfrac{1}{1 - x}\\]"}, {"t": "Evaluar en x = 0,5", "h": "\\[y(0{,}5) = \\dfrac{1}{1 - 0{,}5} = \\dfrac{1}{0{,}5} = 2\\]<div class=\\\"calc-final\\\">\\(y(0{,}5) = 2\\)</div><p>Comprobación: \\(y' = \\dfrac{1}{(1 - x)^2} = y^2\\). ✓ Esta solución crece sin tope al acercarse a \\(x = 1\\): no existe más allá.</p>"}], "fbOk": "Bien: \\(y = \\dfrac{1}{1 - x}\\), y en \\(x = 0{,}5\\) vale \\(2\\)."}, {"id": "a10", "nivel": "alto", "sub": "mod", "titulo": "Hallar la constante de Newton", "enun": "Una barra de hierro a \\(150\\,{}^{\\circ}\\text{C}\\) se deja enfriar en un taller cuya temperatura es constante, \\(30\\,{}^{\\circ}\\text{C}\\). A los \\(5\\) minutos la barra está a \\(90\\,{}^{\\circ}\\text{C}\\). Su temperatura cumple la ley de enfriamiento de Newton, \\(\\dfrac{dT}{dt} = K\\,(T - 30)\\), con \\(t\\) en minutos. Hallá \\(K\\). Escribí el resultado con dos decimales.", "forma": null, "label": "K =", "valor": -0.13862943611198905, "tol": 0.006, "pasos": [{"t": "Separar e integrar", "h": "\\[\\dfrac{dT}{T - 30} = K\\,dt \\quad\\Rightarrow\\quad \\ln|T - 30| = K\\,t + C \\quad\\Rightarrow\\quad T - 30 = A\\,e^{Kt} \\quad\\Rightarrow\\quad T(t) = 30 + A\\,e^{Kt}\\]"}, {"t": "Hallar A con t = 0", "h": "\\[T(0) = 30 + A = 150 \\quad\\Rightarrow\\quad A = 120\\]"}, {"t": "Hallar K con t = 5", "h": "\\[T(5) = 30 + 120\\,e^{5K} = 90 \\quad\\Rightarrow\\quad 120\\,e^{5K} = 60 \\quad\\Rightarrow\\quad e^{5K} = \\dfrac{60}{120} = \\dfrac{1}{2}\\]\\[5K = \\ln\\!\\left(\\dfrac{1}{2}\\right) = -\\ln 2 \\quad\\Rightarrow\\quad K = \\dfrac{-\\ln 2}{5} \\approx \\dfrac{-0{,}693}{5} \\approx -0{,}14\\]<div class=\\\"calc-final\\\">\\(K \\approx -0{,}14\\) por minuto</div><p>Control: \\(K < 0\\) porque la barra se enfría. Comprobación: \\(T(5) = 30 + 120\\cdot\\dfrac{1}{2} = 90\\). ✓</p>"}], "fbOk": "Bien: \\(e^{5K} = \\dfrac{1}{2}\\) da \\(K = \\dfrac{-\\ln 2}{5} \\approx -0{,}14\\)."}, {"id": "a11", "nivel": "alto", "sub": "mod", "titulo": "Cuánto tarda en enfriarse", "enun": "Un motor se apaga a \\(110\\,{}^{\\circ}\\text{C}\\) en un galpón cuya temperatura es constante, \\(20\\,{}^{\\circ}\\text{C}\\). A los \\(10\\) minutos está a \\(80\\,{}^{\\circ}\\text{C}\\). Según la ley de enfriamiento de Newton, \\(\\dfrac{dT}{dt} = K\\,(T - 20)\\), ¿en qué instante el motor llega a <span style=\"white-space:nowrap\">\\(50\\,{}^{\\circ}\\text{C}\\)?</span> Escribí el resultado en minutos, con dos decimales.", "forma": null, "label": "t =", "valor": 27.095112913514548, "tol": 0.4, "pasos": [{"t": "Solución general y A", "h": "\\[\\dfrac{dT}{T - 20} = K\\,dt \\quad\\Rightarrow\\quad \\ln|T - 20| = K\\,t + C \\quad\\Rightarrow\\quad T(t) = 20 + A\\,e^{Kt}\\]\\[T(0) = 20 + A = 110 \\quad\\Rightarrow\\quad A = 90\\]"}, {"t": "Hallar K con t = 10", "h": "\\[20 + 90\\,e^{10K} = 80 \\quad\\Rightarrow\\quad e^{10K} = \\dfrac{60}{90} = \\dfrac{2}{3} \\quad\\Rightarrow\\quad K = \\dfrac{\\ln\\!\\left(\\dfrac{2}{3}\\right)}{10} \\approx -0{,}04055\\]<p>Conviene guardar \\(K\\) con todas las cifras de la calculadora (o dejarlo escrito con el logaritmo): si se redondea a \\(-0{,}04\\), el tiempo final cambia casi medio minuto.</p>"}, {"t": "Plantear T = 50 y despejar t", "h": "\\[20 + 90\\,e^{Kt} = 50 \\quad\\Rightarrow\\quad e^{Kt} = \\dfrac{30}{90} = \\dfrac{1}{3} \\quad\\Rightarrow\\quad K\\,t = \\ln\\!\\left(\\dfrac{1}{3}\\right)\\]\\[t = \\dfrac{\\ln\\!\\left(\\dfrac{1}{3}\\right)}{K} = \\dfrac{\\ln\\!\\left(\\dfrac{1}{3}\\right)}{\\;\\dfrac{\\ln\\!\\left(\\dfrac{2}{3}\\right)}{10}\\;} = \\dfrac{10\\,\\ln\\!\\left(\\dfrac{1}{3}\\right)}{\\ln\\!\\left(\\dfrac{2}{3}\\right)} = \\dfrac{10\\cdot(-1{,}0986)}{-0{,}4055} \\approx 27{,}09\\]<div class=\\\"calc-final\\\">\\(t \\approx 27{,}09\\) minutos</div><p>Control: a los \\(10\\) minutos la diferencia con el ambiente era \\(60\\); para que baje a \\(30\\) hace falta más del doble de tiempo, porque cada vez se enfría más despacio. Dividir dos logaritmos negativos da un tiempo positivo. ✓</p>"}], "fbOk": "Bien: \\(e^{Kt} = \\dfrac{1}{3}\\) con \\(K = \\dfrac{\\ln\\left(\\frac{2}{3}\\right)}{10}\\) da \\(t \\approx 27{,}09\\) minutos."}, {"id": "a12", "nivel": "alto", "sub": "mod", "titulo": "Período de semidesintegración", "enun": "Una muestra de \\(500\\) mg de un isótopo radiactivo se desintegra según \\(\\dfrac{dN}{dt} = -0{,}02\\,N\\), con \\(t\\) en años. ¿Cuántos años tarda en reducirse a la mitad? Escribí el resultado con dos decimales.", "forma": null, "label": "t =", "valor": 34.657359027997266, "tol": 0.17, "pasos": [{"t": "Resolver con la condición inicial", "h": "\\[\\dfrac{dN}{N} = -0{,}02\\,dt \\quad\\Rightarrow\\quad \\ln N = -0{,}02\\,t + C \\quad\\Rightarrow\\quad N = A\\,e^{-0{,}02t}\\]\\[N(0) = A = 500 \\quad\\Rightarrow\\quad N = 500\\,e^{-0{,}02t}\\]"}, {"t": "Plantear la mitad", "h": "\\[500\\,e^{-0{,}02t} = 250 \\quad\\Rightarrow\\quad e^{-0{,}02t} = \\dfrac{1}{2}\\]<p>El \\(500\\) se simplifica: el período de semidesintegración (el tiempo en reducirse a la mitad) no depende de la cantidad inicial.</p>"}, {"t": "Despejar t", "h": "\\[-0{,}02\\,t = -\\ln 2 \\quad\\Rightarrow\\quad t = \\dfrac{\\ln 2}{0{,}02} = 50\\ln 2 \\approx 34{,}66\\]<div class=\\\"calc-final\\\">\\(t \\approx 34{,}66\\) años</div>"}], "fbOk": "Bien: \\(t = \\dfrac{\\ln 2}{0{,}02} = 50\\ln 2 \\approx 34{,}66\\) años."}, {"id": "a13", "nivel": "alto", "sub": "mod", "titulo": "Descarga de un capacitor", "enun": "Un capacitor de \\(C = 0{,}001\\ \\text{F}\\) con carga inicial \\(q_0 = 0{,}02\\) coulomb se descarga a través de \\(R = 2000\\ \\Omega\\). Su carga cumple \\(\\dfrac{dq}{dt} = -\\dfrac{q}{RC}\\), con \\(t\\) en segundos (acá \\(C\\) es la capacidad). ¿En qué instante la carga es el \\(10\\,\\%\\) de la inicial? Escribí el resultado con dos decimales.", "forma": null, "label": "t =", "valor": 4.605170185988092, "tol": 0.03, "pasos": [{"t": "Calcular RC y separar", "h": "\\[RC = 2000\\cdot 0{,}001 = 2\\ \\text{s} \\quad\\Rightarrow\\quad \\dfrac{dq}{dt} = -\\dfrac{q}{2} \\quad\\Rightarrow\\quad \\dfrac{dq}{q} = -\\dfrac{1}{2}\\,dt\\]"}, {"t": "Integrar y despejar", "h": "\\[\\ln q = -\\dfrac{t}{2} + \\ln A \\quad\\Rightarrow\\quad q = A\\,e^{-\\frac{t}{2}}\\]<p>Como \\(q > 0\\), sin valor absoluto; la constante se escribe \\(\\ln A\\) para no confundirla con la capacidad \\(C\\).</p>"}, {"t": "Usar la condición inicial", "h": "\\[q(0) = A = 0{,}02 \\quad\\Rightarrow\\quad q = 0{,}02\\,e^{-\\frac{t}{2}}\\]"}, {"t": "Plantear el 10 %", "h": "\\[0{,}02\\,e^{-\\frac{t}{2}} = 0{,}1\\cdot 0{,}02 \\quad\\Rightarrow\\quad e^{-\\frac{t}{2}} = 0{,}1\\]"}, {"t": "Despejar t", "h": "\\[-\\dfrac{t}{2} = \\ln 0{,}1 = -\\ln 10 \\quad\\Rightarrow\\quad t = 2\\ln 10 \\approx 4{,}61\\]<div class=\\\"calc-final\\\">\\(t \\approx 4{,}61\\ \\text{s}\\)</div><p>En \\(t = RC = 2\\ \\text{s}\\) la carga está al \\(37\\,\\%\\); para bajar al \\(10\\,\\%\\) hacen falta \\(\\ln 10\\) constantes de tiempo, es decir \\(2\\ln 10\\) segundos. El exponente es \\(-\\dfrac{t}{RC}\\): \\(RC\\) divide a \\(t\\).</p>"}], "fbOk": "Bien: \\(e^{-\\frac{t}{2}} = 0{,}1\\) da \\(t = 2\\ln 10 \\approx 4{,}61\\ \\text{s}\\)."}, {"id": "a14", "nivel": "alto", "sub": "mod", "titulo": "Predecir con la ley de Newton", "enun": "Una placa de aluminio sale de una prensa a \\(160\\,{}^{\\circ}\\text{C}\\) y se deja sobre un banco de trabajo donde la temperatura es constante, \\(40\\,{}^{\\circ}\\text{C}\\). A los \\(6\\) minutos la placa está a \\(100\\,{}^{\\circ}\\text{C}\\). Según la ley de enfriamiento de Newton, \\(\\dfrac{dT}{dt} = K\\,(T - 40)\\), ¿qué temperatura tiene la placa a los \\(18\\) minutos? Escribí el resultado con dos decimales si hace falta.", "forma": null, "label": "T(18) =", "valor": 55.0, "tol": 1.2, "pasos": [{"t": "Solución general y A", "h": "\\[\\dfrac{dT}{T - 40} = K\\,dt \\quad\\Rightarrow\\quad \\ln|T - 40| = K\\,t + C \\quad\\Rightarrow\\quad T(t) = 40 + A\\,e^{Kt}\\]\\[T(0) = 40 + A = 160 \\quad\\Rightarrow\\quad A = 120\\]"}, {"t": "Hallar e elevado a 6K con t = 6", "h": "\\[40 + 120\\,e^{6K} = 100 \\quad\\Rightarrow\\quad e^{6K} = \\dfrac{60}{120} = \\dfrac{1}{2}\\]<p>Si se quiere, \\(K = \\dfrac{\\ln\\left(\\frac{1}{2}\\right)}{6} \\approx -0{,}1155\\); pero para \\(t = 18\\) alcanza con \\(e^{6K}\\).</p>"}, {"t": "Evaluar en t = 18", "h": "\\[e^{18K} = e^{6K\\cdot 3} = \\left(e^{6K}\\right)^3 = \\left(\\dfrac{1}{2}\\right)^3 = \\dfrac{1}{8}\\]\\[T(18) = 40 + 120\\cdot\\dfrac{1}{8} = 40 + 15 = 55\\]<div class=\\\"calc-final\\\">\\(T(18) = 55\\,{}^{\\circ}\\text{C}\\)</div><p>Cada \\(6\\) minutos la diferencia con el ambiente se reduce a la mitad: \\(120 \\to 60 \\to 30 \\to 15\\). Con una recta (\\(-10\\) grados por minuto) daría \\(-20\\,{}^{\\circ}\\text{C}\\), un absurdo: la placa no puede enfriarse por debajo del ambiente.</p>"}], "fbOk": "Bien: \\(e^{6K} = \\dfrac{1}{2}\\), así que \\(e^{18K} = \\dfrac{1}{8}\\) y \\(T(18) = 40 + 15 = 55\\)."}, {"id": "a15", "nivel": "alto", "sub": "mod", "titulo": "Caída con rozamiento", "enun": "Un cuerpo de \\(2\\ \\text{kg}\\) se suelta desde el reposo. Sobre él actúan su peso (con \\(g = 10\\ \\text{m/s}^2\\)) y una fuerza de rozamiento con el aire proporcional a la velocidad, de modo que la segunda ley de Newton queda \\(\\dfrac{dv}{dt} = 10 - 0{,}5\\,v\\), con \\(t\\) en segundos y \\(v\\) en m/s. ¿Qué velocidad tiene a los \\(2\\) segundos? Escribí el resultado con dos decimales.", "forma": null, "label": "v(2) =", "valor": 12.642411176571153, "tol": 0.06, "pasos": [{"t": "Separar", "h": "\\[\\dfrac{dv}{10 - 0{,}5\\,v} = dt\\]<p>Es separable: el lado derecho depende solo de \\(v\\). El bloque \\(10 - 0{,}5\\,v\\) juega el papel que \\(T - T_a\\) tiene en la ley de Newton.</p>"}, {"t": "Integrar cada lado", "h": "\\[\\int \\dfrac{dv}{10 - 0{,}5\\,v} = \\int dt \\quad\\Rightarrow\\quad -\\dfrac{1}{0{,}5}\\,\\ln|10 - 0{,}5\\,v| = t + C \\quad\\Rightarrow\\quad \\ln|10 - 0{,}5\\,v| = -0{,}5\\,t + C_1\\]<p>La derivada de \\(10 - 0{,}5\\,v\\) es \\(-0{,}5\\); por eso aparece el factor \\(-\\dfrac{1}{0{,}5} = -2\\) delante del logaritmo.</p>"}, {"t": "Despejar y usar v(0) = 0", "h": "\\[10 - 0{,}5\\,v = A\\,e^{-0{,}5t} \\quad\\Rightarrow\\quad v = \\dfrac{10 - A\\,e^{-0{,}5t}}{0{,}5} = 20 - 2A\\,e^{-0{,}5t}\\]\\[v(0) = 20 - 2A = 0 \\quad\\Rightarrow\\quad A = 10 \\quad\\Rightarrow\\quad v(t) = 20 - 20\\,e^{-0{,}5t}\\]"}, {"t": "Evaluar en t = 2", "h": "\\[v(2) = 20 - 20\\,e^{-1} = 20 - \\dfrac{20}{2{,}718} \\approx 20 - 7{,}36 = 12{,}64\\]<div class=\\\"calc-final\\\">\\(v(2) \\approx 12{,}64\\ \\text{m/s}\\)</div><p>Control: sin rozamiento sería \\(v = 10\\cdot 2 = 20\\ \\text{m/s}\\); con rozamiento es menor. Y para \\(t\\) grande \\(v \\to 20\\ \\text{m/s}\\), la velocidad límite, donde el peso y el rozamiento se equilibran: \\(10 - 0{,}5\\cdot 20 = 0\\).</p>"}], "fbOk": "Bien: \\(v = 20 - 20\\,e^{-0{,}5t}\\) y \\(v(2) = 20\\,(1 - e^{-1}) \\approx 12{,}64\\ \\text{m/s}\\)."}];
+</script>
+<script>
+(function(){
+'use strict';
+const $ = (s, r) => (r||document).querySelector(s);
+const $$ = (s, r) => Array.from((r||document).querySelectorAll(s));
+
+/* ---------- KaTeX ---------- */
+const KOPT = { delimiters: [{left:'\\[',right:'\\]',display:true},{left:'\\(',right:'\\)',display:false}], throwOnError:false,
+  macros: { '\\neq': '\\mathrel{\\text{\\char"2260}}', '\\ne': '\\mathrel{\\text{\\char"2260}}', '\\lim': '\\mathop{\\text{lím}}\\limits' } };
+function tex(el){ if (window.renderMathInElement) renderMathInElement(el||document.body, KOPT); }
+
+/* ---------- constantes ---------- */
+const N_EJ = 10, POR_NIVEL = 5, N_OPTS = 6, MAX_FOTOS = 4;
+const PTS = { medio: 8, alto: 12 };
+const CUPOS = { medio: [['mod',2],['ci',1],['libre',2]], alto: [['mod',2],['ci',1],['libre',2]] };
+const STORE_KEY = 'tp-eval-separables-philips_v1';
+const INTENTOS_KEY = 'tp-eval-separables-philips_intentos';
+const DB_NAME = 'tp-eval-separables-fotos';
+const byId = id => BANCO.find(e => e.id===id);
+const LETRAS = 'ABCDEF';
+const SUBTXT = { mod: 'modelización', ci: 'con condición inicial', libre: 'sin condición inicial' };
+const RANGO = { libre: 0, ci: 1, mod: 2 };   // orden de menor a mayor dificultad dentro de cada bloque
+
+/* ---------- estado ---------- */
+let ST = estadoVacio();
+function estadoVacio(){ return {v:1, alumno:'', division:'', intento:0, inicio:0, fin:0, orden:[], perm:{}, resp:{}, vista:'portada'}; }
+function guardar(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(ST)); } catch(_){} }
+function leerIntentos(){ try { return parseInt(localStorage.getItem(INTENTOS_KEY)||'0',10)||0; } catch(_){ return 0; } }
+function subirIntentos(){ const n = leerIntentos()+1; try { localStorage.setItem(INTENTOS_KEY, String(n)); } catch(_){} return n; }
+function permValida(p){ return Array.isArray(p) && p.length===N_OPTS && [...p].sort().join()==='0,1,2,3,4,5'; }
+function cargar(){
+  try {
+    const s = localStorage.getItem(STORE_KEY); if (!s) return;
+    const o = JSON.parse(s);
+    const valido = o && o.v===1 && Array.isArray(o.orden) && o.orden.length===N_EJ && o.orden.every(id => !!byId(id))
+      && o.perm && o.orden.filter(id => byId(id).nivel==='medio').every(id => permValida(o.perm[id]));
+    if (valido) ST = Object.assign(estadoVacio(), o); else localStorage.removeItem(STORE_KEY);
+  } catch(_){}
+}
+const enCurso = () => ST.orden.length===N_EJ;
+const confirmados = () => ST.orden.filter(id => ST.resp[id] && ST.resp[id].ok).length;
+const terminada = () => enCurso() && confirmados()===N_EJ;
+
+/* ---------- sorteo estratificado ---------- */
+function barajar(a, rnd){ for (let i=a.length-1; i>0; i--){ const j = Math.floor(rnd()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; }
+function sortear(rnd){
+  rnd = rnd || Math.random;
+  const orden = [];
+  ['medio','alto'].forEach(niv => {
+    const pool = BANCO.filter(e => e.nivel===niv).map(e => e.id);
+    const usados = new Set(); const elegidos = [];
+    CUPOS[niv].forEach(([sub, k]) => {
+      const cand = barajar(pool.filter(id => !usados.has(id) && (sub==='*' || byId(id).sub===sub)), rnd);
+      for (let i=0; i<k && i<cand.length; i++){ usados.add(cand[i]); elegidos.push(cand[i]); }
+    });
+    barajar(elegidos, rnd);
+    elegidos.sort((a, b) => RANGO[byId(a).sub] - RANGO[byId(b).sub]);   // estable: dentro del mismo tipo queda el orden del sorteo
+    orden.push(...elegidos);
+  });
+  return orden;
+}
+function sortearPerm(orden, rnd){
+  rnd = rnd || Math.random; const perm = {};
+  orden.forEach(id => { if (byId(id).nivel==='medio') perm[id] = barajar([0,1,2,3,4,5], rnd); });
+  return perm;
+}
+
+/* ---------- utilidades ---------- */
+function parseNum(s){
+  s = (s||'').trim().toLowerCase().replace(',', '.').replace('−','-');
+  if (!s) return null;
+  const m = s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+  if (m) { const d = parseFloat(m[2]); return d===0 ? null : parseFloat(m[1])/d; }
+  if (!/^-?\d*\.?\d+$/.test(s)) return null;
+  const v = parseFloat(s);
+  return isNaN(v) ? null : v;
+}
+/* respuesta: para Medio es el índice REAL de la opción elegida (0..5); para Alto, el texto escrito */
+function evaluar(e, resp){
+  if (e.nivel==='medio'){ const okk = Number(resp)===e.correct; return {ok: okk, pts: okk ? PTS.medio : 0}; }
+  const v = parseNum(resp); const okk = v!==null && Math.abs(v - e.valor) <= e.tol;
+  return {ok: okk, pts: okk ? PTS.alto : 0};
+}
+function puntajes(){ let t = 0; ST.orden.forEach(id => { const d = ST.resp[id]; if (d && d.ok) t += d.pts; }); return {total: t, max: 100}; }
+const fmtPts = v => String(v);
+const fmtFecha = ts => { const d = new Date(ts); const p = n => String(n).padStart(2,'0'); return `${p(d.getDate())}/${p(d.getMonth()+1)}/${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`; };
+const fmtDur = ms => { const s = Math.round(ms/1000); return s < 60 ? `${s} s` : `${Math.floor(s/60)} min ${String(s%60).padStart(2,'0')} s`; };
+function hashCodigo(str){ let h = 5381; for (let i=0; i<str.length; i++){ h = ((h<<5)+h+str.charCodeAt(i))|0; } return (h>>>0).toString(36).toUpperCase().padStart(7,'0'); }
+function firma(){ return ST.orden.map(id => byId(id).nivel==='medio' ? id + ST.perm[id].join('') : id).join('.'); }
+function codigo(){ const lens = ST.orden.map(id => (FOTOS[id]||[]).map(f => f.d.length).join('+')).join(','); return hashCodigo(`${firma()}|${ST.inicio}|${ST.fin}|${ST.alumno}|${ST.intento}|F${lens}`); }
+const slug = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'');
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- fotos: IndexedDB con caché en memoria (lista por ejercicio) ---------- */
+const FOTOS = {};
+let db = null;
+function abrirDB(){
+  return new Promise(res => {
+    try {
+      if (!window.indexedDB) return res(null);
+      const rq = indexedDB.open(DB_NAME, 1);
+      rq.onupgradeneeded = () => { rq.result.createObjectStore('fotos'); };
+      rq.onsuccess = () => res(rq.result);
+      rq.onerror = () => res(null);
+    } catch(_){ res(null); }
+  });
+}
+function dbPut(id, lista){ if (!db) return; try { db.transaction('fotos','readwrite').objectStore('fotos').put(lista, id); } catch(_){} }
+function dbDel(id){ if (!db) return; try { db.transaction('fotos','readwrite').objectStore('fotos').delete(id); } catch(_){} }
+function dbClear(){ if (!db) return; try { db.transaction('fotos','readwrite').objectStore('fotos').clear(); } catch(_){} }
+function dbLoadAll(){
+  return new Promise(res => {
+    if (!db) return res();
+    try {
+      const st = db.transaction('fotos','readonly').objectStore('fotos');
+      const rq = st.openCursor();
+      rq.onsuccess = () => { const c = rq.result; if (c){ if (Array.isArray(c.value) && c.value.length) FOTOS[c.key] = c.value; c.continue(); } else res(); };
+      rq.onerror = () => res();
+    } catch(_){ res(); }
+  });
+}
+function nFotos(id){ return (FOTOS[id]||[]).length; }
+function setFotos(id, lista){
+  if (lista && lista.length){ FOTOS[id] = lista.slice(0, MAX_FOTOS); dbPut(id, FOTOS[id]); } else { delete FOTOS[id]; dbDel(id); }
+  const d = ST.resp[id] || (ST.resp[id] = {}); d.fotos = nFotos(id); guardar();
+}
+function agregarFoto(id, foto){ if (nFotos(id) >= MAX_FOTOS) return false; setFotos(id, (FOTOS[id]||[]).concat([foto])); return true; }
+function quitarFoto(id, k){ const l = (FOTOS[id]||[]).slice(); l.splice(k, 1); setFotos(id, l); }
+/* detector de foto vacía: función pura sobre datos de píxeles (RGBA) */
+function fotoVacia(data, w, h){
+  if (Math.max(w, h) < 200) return true;
+  const paso = 4; let n = 0, s = 0, s2 = 0, bordes = 0, pares = 0;
+  const lum = (i) => 0.299*data[i] + 0.587*data[i+1] + 0.114*data[i+2];
+  for (let y=0; y<h; y+=paso){
+    for (let x=0; x<w; x+=paso){
+      const i = (y*w + x)*4, L = lum(i);
+      n++; s += L; s2 += L*L;
+      if (x+paso < w){ pares++; if (Math.abs(L - lum(i + paso*4)) > 24) bordes++; }
+    }
+  }
+  const media = s/n, sd = Math.sqrt(Math.max(0, s2/n - media*media));
+  return sd < 6 && (bordes/Math.max(1,pares)) < 0.0015;
+}
+function procesarArchivo(file, id, art){
+  const st = $('[data-fst]', art);
+  if (nFotos(id) >= MAX_FOTOS){ st.textContent = `Ya cargaste ${MAX_FOTOS} fotos en este ejercicio: quitá una si querés reemplazarla.`; st.style.color = 'var(--rust)'; return; }
+  st.textContent = 'Procesando la imagen…'; st.style.color = '';
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    try {
+      const MAXL = 1400; const escala = Math.min(1, MAXL/Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width*escala)), h = Math.max(1, Math.round(img.height*escala));
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+      let vacia = false;
+      try { const px = ctx.getImageData(0, 0, w, h).data; vacia = fotoVacia(px, w, h); } catch(_){ vacia = false; }
+      URL.revokeObjectURL(url);
+      if (vacia){ st.textContent = 'Esa imagen parece vacía o demasiado chica: sacá la foto de la hoja con el desarrollo, bien iluminada.'; st.style.color = 'var(--rust)'; return; }
+      const d = cv.toDataURL('image/jpeg', 0.72);
+      agregarFoto(id, {d, w, h});
+      pintarFotos(art, id);
+      habilitarConfirmar(art);
+    } catch(err){ st.textContent = 'No pude procesar la imagen. Probá con otra foto.'; st.style.color = 'var(--rust)'; }
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); st.textContent = 'No pude abrir ese archivo: elegí una imagen (JPG o PNG).'; st.style.color = 'var(--rust)'; };
+  img.src = url;
+}
+function pintarFotos(art, id){
+  const lista = FOTOS[id] || []; const th = $('[data-thumbs]', art); const st = $('[data-fst]', art);
+  const congelado = !!(ST.resp[id] && ST.resp[id].ok);
+  st.style.color = '';
+  th.innerHTML = lista.map((f, k) => `<div class="thumb"><img src="${f.d}" alt="Foto ${k+1} del procedimiento"><span class="n">${k+1}</span>${congelado ? '' : `<button type="button" data-quitar="${k}" aria-label="Quitar la foto ${k+1}">Quitar</button>`}</div>`).join('');
+  const lleno = lista.length >= MAX_FOTOS;
+  $('[data-camara]', art).disabled = congelado || lleno; $('[data-galeria]', art).disabled = congelado || lleno;
+  if (!lista.length) st.textContent = 'Todavía no cargaste ninguna foto del procedimiento.';
+  else if (lleno) st.textContent = `${MAX_FOTOS} fotos cargadas (el máximo).`;
+  else st.textContent = `${lista.length} ${lista.length===1 ? 'foto cargada' : 'fotos cargadas'}. Podés agregar ${MAX_FOTOS - lista.length} más si el desarrollo sigue en otra hoja.`;
+}
+
+/* ---------- vistas ---------- */
+function mostrarVista(v){
+  ['vPortada','vActividad','vResultados'].forEach(id => $('#'+id).classList.toggle('on', id===v));
+  $('#barra').style.display = (v==='vPortada') ? 'none' : '';
+  ST.vista = v==='vPortada' ? 'portada' : (v==='vActividad' ? 'actividad' : 'resultados'); guardar();
+  $('#'+v).scrollIntoView({block:'start', behavior:'instant'});
+}
+function irPortada(){
+  const curso = enCurso();
+  $('#pForm').style.display = curso ? 'none' : '';
+  $('#pEnCurso').style.display = curso ? '' : 'none';
+  if (curso){
+    $('#pResumenCurso').innerHTML = `<b>Alumno</b><span>${esc(ST.alumno)} · ${esc(ST.division)}</span><b>Intento</b><span>N.º ${ST.intento}</span><b>Avance</b><span>${confirmados()} de ${N_EJ} ejercicios confirmados</span><b>Inicio</b><span>${fmtFecha(ST.inicio)}</span>`;
+    $('[data-volver]').textContent = terminada() ? 'Ver los resultados' : 'Volver a la actividad';
+  } else {
+    const n = leerIntentos();
+    $('#pIntentos').textContent = n ? `Intentos anteriores en este dispositivo: ${n}` : '';
+  }
+  mostrarVista('vPortada');
+}
+function irActividad(){ mostrarVista('vActividad'); pintarBarra(); }
+function irResultados(){ if (!terminada()) return irActividad(); if (!ST.fin){ ST.fin = Date.now(); guardar(); } armarInforme(); mostrarVista('vResultados'); pintarBarra(); }
+
+/* ---------- comenzar / reiniciar ---------- */
+function comenzar(nombre, division){
+  nombre = (nombre||'').trim(); division = (division||'').trim();
+  if (nombre.length < 3 || !division) return false;
+  ST = estadoVacio();
+  ST.alumno = nombre; ST.division = division; ST.intento = subirIntentos(); ST.inicio = Date.now(); ST.orden = sortear(); ST.perm = sortearPerm(ST.orden);
+  guardar();
+  renderLista(); irActividad();
+  return true;
+}
+function reiniciar(){
+  ST = estadoVacio(); guardar();
+  Object.keys(FOTOS).forEach(k => delete FOTOS[k]); dbClear();
+  $('#lista').innerHTML = ''; $('#infResumen').innerHTML = ''; $('#infFotos').innerHTML = '';
+  $('#modalReset').classList.remove('show');
+  irPortada();
+}
+
+/* ---------- tarjetas ---------- */
+function htmlRespuesta(e, id){
+  if (e.nivel==='medio'){
+    const p = ST.perm[id];
+    return `<div class="consigna">Resolvé en la hoja y elegí la <b>única</b> opción que coincide con tu resultado. Las opciones están en orden distinto para cada alumno.</div>
+    <div class="opts">${p.map((real, k) => `<label class="opt"><input type="radio" name="opt-${id}" value="${real}"><span class="let">${LETRAS[k]}</span><span class="tex">${e.opts[real]}</span></label>`).join('')}</div>`;
+  }
+  return `<div class="consigna">Resolvé en la hoja y escribí el <b>valor</b> que se pide. Con coma o con punto; si es una fracción exacta, también vale con barra.</div>
+  <div class="resp">
+    <div><label>\\(${e.label}\\)</label><input type="text" data-num placeholder="por ejemplo 2,45" autocomplete="off" inputmode="decimal"><div class="hint">número con dos decimales (coma o punto), o fracción con barra</div></div>
+  </div>`;
+}
+function renderLista(){
+  const cont = $('#lista');
+  cont.innerHTML = ST.orden.map((id, i) => {
+    const e = byId(id);
+    return `
+<article class="ej ${e.nivel}" data-ej="${id}" data-i="${i}">
+  <div class="ej-head">
+    <div class="ej-num">Ejercicio ${i+1} <span class="crit">${SUBTXT[e.sub]}</span></div>
+    <div class="ej-lab"><span class="bullet"></span><span class="lab">laboratorio</span><span class="best">best</span><span class="ia">-IA</span></div>
+  </div>
+  <div class="ej-body">
+    <div class="titulo">${esc(e.titulo)}</div>
+    <div class="enun">${e.enun}</div>
+    ${htmlRespuesta(e, id)}
+    <div class="foto">
+      <div class="tt">Fotos del procedimiento (1 a ${MAX_FOTOS})</div>
+      <div class="fila">
+        <button class="btn small sec" type="button" data-camara>📷 Sacar foto</button>
+        <button class="btn small sec" type="button" data-galeria>🖼️ Subir imagen</button>
+        <input type="file" accept="image/*" capture="environment" data-in-camara>
+        <input type="file" accept="image/*" data-in-galeria>
+      </div>
+      <div class="thumbs" data-thumbs></div>
+      <div class="fst" data-fst>Todavía no cargaste ninguna foto del procedimiento.</div>
+    </div>
+    <div class="acciones">
+      <button class="btn" type="button" data-confirmar disabled>Confirmar este ejercicio</button>
+      <span class="estado" data-estado>sin confirmar</span>
+    </div>
+    <div class="fb" data-fbej></div>
+    <div data-reso></div>
+  </div>
+</article>`;
+  }).join('');
+  tex(cont);
+  ST.orden.forEach(id => { const art = $(`.ej[data-ej="${id}"]`); const d = ST.resp[id] || {}; const e = byId(id);
+    if (e.nivel==='medio'){ if (d.r!==undefined && d.r!==null && d.r!==''){ const inp = $(`input[value="${d.r}"]`, art); if (inp){ inp.checked = true; inp.closest('.opt').classList.add('sel'); } } }
+    else if (d.r!==undefined) $('[data-num]', art).value = d.r;
+    pintarFotos(art, id);
+    if (d.ok) pintarConfirmado(art, id); else habilitarConfirmar(art);
+  });
+  pintarBarra();
+}
+function respuestaActual(art){
+  const e = byId(art.dataset.ej);
+  if (e.nivel==='medio'){ const c = $('input[type=radio]:checked', art); return c ? c.value : ''; }
+  return $('[data-num]', art).value;
+}
+function respuestaValida(e, r){ return e.nivel==='medio' ? (r!=='' && r!==null && r!==undefined) : parseNum(r)!==null; }
+function habilitarConfirmar(art){
+  const id = art.dataset.ej; const d = ST.resp[id] || {}; const e = byId(id);
+  if (d.ok) return;
+  const r = respuestaActual(art);
+  const listo = respuestaValida(e, r) && nFotos(id) > 0;
+  $('[data-confirmar]', art).disabled = !listo;
+  const falta = []; if (!respuestaValida(e, r)) falta.push(e.nivel==='medio' ? 'elegir una opción' : 'el valor'); if (!nFotos(id)) falta.push('la foto');
+  $('[data-estado]', art).textContent = listo ? 'listo para confirmar' : ('falta ' + falta.join(' y '));
+}
+function confirmar(art){
+  const id = art.dataset.ej; const e = byId(id); const d = ST.resp[id] || (ST.resp[id] = {});
+  if (d.ok) return false;
+  const r = respuestaActual(art);
+  if (!respuestaValida(e, r) || !nFotos(id)) return false;
+  const ev = evaluar(e, r);
+  Object.assign(d, {r, ok: ev, pts: ev.pts, fotos: nFotos(id), t1: Date.now(), t0: d.t0 || Date.now()});
+  guardar();
+  pintarConfirmado(art, id);
+  pintarBarra();
+  return true;
+}
+function letraDe(id, real){ const p = ST.perm[id] || []; const k = p.indexOf(Number(real)); return k >= 0 ? LETRAS[k] : '—'; }
+function pintarConfirmado(art, id){
+  const e = byId(id), d = ST.resp[id];
+  art.classList.add('done', 'frozen');
+  $$('input,button', art).forEach(el => { if (!el.closest('[data-reso]')) el.disabled = true; });
+  pintarFotos(art, id);
+  $('[data-estado]', art).textContent = `confirmado · ${fmtPts(d.pts)} de ${fmtPts(PTS[e.nivel])}`;
+  $('[data-estado]', art).style.color = d.ok.ok ? 'var(--green)' : 'var(--rust)';
+  if (e.nivel==='medio'){
+    $$('.opt', art).forEach(o => { const v = Number($('input', o).value); if (v===e.correct) o.classList.add('ok-mark'); else if (String(v)===String(d.r)) o.classList.add('no-mark'); });
+  }
+  const fb = $('[data-fbej]', art);
+  fb.className = 'fb show ' + (d.ok.ok ? 'good' : 'bad');
+  const tuResp = e.nivel==='medio' ? `Elegiste la opción <b>${letraDe(id, d.r)}</b>.` : `Escribiste <b>${esc(d.r)}</b>.`;
+  fb.innerHTML = `<div class="pts">${fmtPts(d.pts)} de ${fmtPts(PTS[e.nivel])} puntos</div>
+    <p style="margin:6px 0 0">${tuResp} ${d.ok.ok ? e.fbOk + ' Compará igual tu desarrollo con la resolución.' : 'No es la respuesta correcta. Abrí la resolución paso a paso y buscá en qué paso se separa de la tuya.'}</p>`;
+  const reso = $('[data-reso]', art);
+  const final = e.nivel==='medio' ? `Respuesta correcta: opción <b>${letraDe(id, e.correct)}</b>, ${e.opts[e.correct]}` : `Respuesta correcta: \\(${e.label} ${String(Math.round(e.valor*100)/100).replace('.', '{,}')}\\)`;
+  reso.innerHTML = `<div class="reso"><button type="button"><span class="ttl">Ver la resolución completa</span><span class="chev">▸</span></button><div class="cont">
+    ${e.pasos.map((p, i) => `<div class="paso"><button type="button"><span class="num">Paso ${i+1}</span><span class="ttl">${p.t}</span><span class="chev">▸</span></button><div class="cont">${p.h}</div></div>`).join('')}
+    <div class="calc-final" style="margin-top:12px">${final}</div>
+  </div></div>`;
+  tex(fb); tex(reso);
+}
+function pintarBarra(){
+  const c = confirmados();
+  $('#bQuien').textContent = ST.alumno ? `${ST.alumno} · ${ST.division}` : '';
+  $('#bFill').style.width = (100*c/N_EJ) + '%';
+  $('#bProg').textContent = `${c} de ${N_EJ} confirmados`;
+  const b = $('#btnResultados'); b.disabled = !terminada();
+  $('#cierreTxt').textContent = terminada() ? 'Confirmaste los diez. Pasá a los resultados para descargar el informe y subirlo a Classroom.' : `Te faltan ${N_EJ-c} ejercicios por confirmar. El botón se habilita cuando estén los diez.`;
+}
+
+/* ---------- informe ---------- */
+function armarInforme(){
+  const p = puntajes(); const cod = codigo();
+  const filas = ST.orden.map((id, i) => { const e = byId(id), d = ST.resp[id];
+    const dur = d.t1 && d.t0 ? fmtDur(d.t1 - d.t0) : '—';
+    const tu = e.nivel==='medio' ? `opción ${letraDe(id, d.r)}: ${e.opts[d.r]}` : esc(d.r);
+    return `<tr><td>${i+1}</td><td>${esc(e.titulo)}</td><td>${SUBTXT[e.sub]}</td><td>${tu}</td><td>${fmtPts(d.pts)} / ${PTS[e.nivel]}</td><td>${nFotos(id)}</td><td>${dur}</td></tr>`; }).join('');
+  const totalFotos = ST.orden.reduce((s, id) => s + nFotos(id), 0);
+  $('#infResumen').innerHTML = `
+    <div class="inf-head"><div><div class="t1">Informe · TP evaluado · Variables separables</div><div class="t2">Escuela Philips · Matemática · 5.º año · laboratoriobest-IA</div></div><div class="score">${p.total}<span style="font-size:1rem;color:var(--muted)"> / 100</span></div></div>
+    <div class="kv"><b>Alumno</b><span>${esc(ST.alumno)} · ${esc(ST.division)}</span><b>Intento</b><span>N.º ${ST.intento}</span><b>Inicio</b><span>${fmtFecha(ST.inicio)}</span><b>Fin</b><span>${fmtFecha(ST.fin)}</span><b>Combinación</b><span style="font-family:'Fira Code',monospace;font-size:.85rem;word-break:break-all;overflow-wrap:anywhere">${firma()}</span><b>Código</b><span><span class="codigo">${cod}</span></span></div>
+    <div class="tabla-wrap"><table class="tabla"><tr><th>#</th><th>Ejercicio</th><th>Tipo</th><th>Tu respuesta</th><th>Puntos</th><th>Fotos</th><th>Tiempo</th></tr>${filas}</table></div>
+    <p style="font-size:.8rem;color:var(--muted);margin:8px 0 0">Los puntos salen de la corrección automática: 8 por cada uno de los cinco primeros ejercicios (opción múltiple) y 12 por cada uno de los cinco siguientes (respuesta numérica). Las ${totalFotos} fotos del procedimiento van a continuación, cada una con el nombre y el código.</p>`;
+  $('#infFotos').innerHTML = ST.orden.map((id, i) => { const l = FOTOS[id] || []; if (!l.length) return `<div class="fotopag"><div class="fh">Ejercicio ${i+1} · ${esc(ST.alumno)} · ${cod}</div><p>Sin foto.</p></div>`;
+    return l.map((f, k) => `<div class="fotopag"><div class="fh">Ejercicio ${i+1} · foto ${k+1} de ${l.length} · ${esc(ST.alumno)} · ${cod}</div><img src="${f.d}" alt="Procedimiento del ejercicio ${i+1}, foto ${k+1}"></div>`).join(''); }).join('');
+  tex($('#infResumen'));
+}
+function cargarScript(src, ms){
+  return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); setTimeout(() => rej(new Error('timeout')), ms||9000); });
+}
+async function descargarPDF(){
+  const msg = $('#pdfMsg'); msg.className = 'fb info show'; msg.textContent = 'Armando el PDF…';
+  const btn = $('#btnPDF'); btn.disabled = true;
+  try {
+    if (!window.html2canvas) await cargarScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
+    if (!(window.jspdf && window.jspdf.jsPDF)) await cargarScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({unit:'mm', format:'a4'});
+    const W = 210, H = 297, M = 10;
+    const AW = 900;  // ancho fijo de captura: en el celular la tabla no debe salir recortada
+    const cv = await window.html2canvas($('#infResumen'), {scale: 2, backgroundColor: '#ffffff', useCORS: true, width: AW, windowWidth: AW + 40,
+      onclone: doc => { const el = doc.querySelector('#infResumen'); el.style.width = AW + 'px'; el.style.maxWidth = 'none'; const tw = doc.querySelector('#infResumen .tabla-wrap'); if (tw) tw.style.overflow = 'visible'; }});
+    const imgW = W - 2*M, pxPerMm = cv.width/imgW, pageHpx = Math.floor((H - 2*M)*pxPerMm);
+    let y = 0, first = true;
+    while (y < cv.height){
+      const h = Math.min(pageHpx, cv.height - y);
+      const c2 = document.createElement('canvas'); c2.width = cv.width; c2.height = h;
+      c2.getContext('2d').drawImage(cv, 0, y, cv.width, h, 0, 0, cv.width, h);
+      if (!first) pdf.addPage(); first = false;
+      pdf.addImage(c2.toDataURL('image/jpeg', 0.9), 'JPEG', M, M, imgW, h/pxPerMm);
+      y += h;
+    }
+    const cod = codigo();
+    ST.orden.forEach((id, i) => { const l = FOTOS[id] || [];
+      l.forEach((f, k) => {
+        pdf.addPage(); pdf.setFontSize(10); pdf.text(`Ejercicio ${i+1} · foto ${k+1} de ${l.length} · ${ST.alumno} · ${ST.division} · Intento N.º ${ST.intento} · ${cod}`, M, M);
+        const maxW = W - 2*M, maxH = H - 2*M - 8; const s = Math.min(maxW/f.w, maxH/f.h);
+        pdf.addImage(f.d, 'JPEG', M, M + 5, f.w*s, f.h*s);
+      });
+    });
+    const nombre = `Informe_${slug(ST.alumno)}_${slug(ST.division)}_intento${ST.intento}.pdf`;
+    pdf.save(nombre);
+    msg.className = 'fb good show'; msg.textContent = `Listo: ${nombre}. Subilo a la tarea de Classroom.`;
+  } catch(err){
+    msg.className = 'fb bad show'; msg.textContent = 'No pude generar el PDF automáticamente. Se abre el diálogo de impresión: elegí "Guardar como PDF".';
+    setTimeout(() => { try { window.print(); } catch(_){} }, 400);
+  }
+  btn.disabled = false;
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click', e => {
+  if (e.target.closest('#btnComenzar')){
+    const ok = comenzar($('#fNombre').value, $('#fDiv').value);
+    const er = $('#pErr'); if (!ok){ er.classList.add('show'); er.textContent = 'Completá tu apellido y nombre (al menos 3 letras) y elegí la división.'; } else er.classList.remove('show');
+    return;
+  }
+  if (e.target.closest('[data-portada]')){ irPortada(); return; }
+  if (e.target.closest('[data-volver]')){ if (terminada()) irResultados(); else irActividad(); return; }
+  if (e.target.closest('[data-reiniciar]')){ $('#mIntento').textContent = leerIntentos()+1; $('#modalReset').classList.add('show'); return; }
+  if (e.target.closest('#doReset')){ reiniciar(); return; }
+  if (e.target.closest('#closeReset') || e.target.id==='modalReset'){ $('#modalReset').classList.remove('show'); return; }
+  if (e.target.closest('#btnResultados')){ irResultados(); return; }
+  if (e.target.closest('#btnPDF')){ descargarPDF(); return; }
+  if (e.target.closest('#btnPrint')){ try { window.print(); } catch(_){} return; }
+  const pasoBtn = e.target.closest('.paso > button, .reso > button');
+  if (pasoBtn){ const p = pasoBtn.parentElement; p.classList.toggle('open'); if (p.classList.contains('open')){ const r = p.getBoundingClientRect(); if (r.top < 70) p.scrollIntoView({block:'start'}); } return; }
+  const art = e.target.closest('.ej');
+  if (art){
+    if (e.target.closest('[data-camara]')){ $('[data-in-camara]', art).click(); return; }
+    if (e.target.closest('[data-galeria]')){ $('[data-in-galeria]', art).click(); return; }
+    const q = e.target.closest('[data-quitar]');
+    if (q){ const d = ST.resp[art.dataset.ej]; if (d && d.ok) return; quitarFoto(art.dataset.ej, Number(q.dataset.quitar)); pintarFotos(art, art.dataset.ej); habilitarConfirmar(art); return; }
+    if (e.target.closest('[data-confirmar]')){ confirmar(art); return; }
+  }
+});
+document.addEventListener('input', e => {
+  const art = e.target.closest('.ej'); if (!art) return;
+  const d = ST.resp[art.dataset.ej] || (ST.resp[art.dataset.ej] = {});
+  if (d.ok) return;
+  if (!d.t0) d.t0 = Date.now();
+  if (e.target.matches('[data-num]')) d.r = e.target.value;
+  if (e.target.matches('input[type=radio]')){ d.r = e.target.value; $$('.opt', art).forEach(o => o.classList.toggle('sel', $('input', o).checked)); }
+  guardar(); habilitarConfirmar(art);
+});
+document.addEventListener('change', e => {
+  const art = e.target.closest('.ej'); if (!art) return;
+  if (e.target.matches('[data-in-camara],[data-in-galeria]')){
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const d = ST.resp[art.dataset.ej] || (ST.resp[art.dataset.ej] = {}); if (!d.t0){ d.t0 = Date.now(); guardar(); }
+    procesarArchivo(f, art.dataset.ej, art); e.target.value = '';
+  } else if (e.target.matches('input[type=radio]')){ const ev = new Event('input', {bubbles:true}); e.target.dispatchEvent(ev); }
+});
+document.addEventListener('focusin', e => {
+  const art = e.target.closest('.ej'); if (!art) return;
+  const d = ST.resp[art.dataset.ej] || (ST.resp[art.dataset.ej] = {}); if (!d.t0 && !d.ok){ d.t0 = Date.now(); guardar(); }
+});
+
+/* ---------- respaldo sin KaTeX ---------- */
+const SYM = {infty:'∞', to:'→', le:'≤', ge:'≥', ne:'≠', neq:'≠', Rightarrow:'⇒', in:'∈', forall:'∀', pm:'±', cdot:'·', cdots:'⋯', ldots:'…', alpha:'α', beta:'β', pi:'π', approx:'≈', times:'×', quad:' ', qquad:'  ', ',':' ', ';':' ', '!':'', ' ':' ', 'Big':'', 'big':'', displaystyle:'', limits:'', mathop:'', left:'', right:'', ln:'ln', circ:'°', Omega:'Ω', int:'∫', operatorname:''};
+function mfTok(s){ const t = []; let i = 0;
+  while (i < s.length){ const ch = s[i];
+    if (ch === '\\'){ let j = i+1; if (/[a-zA-Z]/.test(s[j]||'')){ while (j < s.length && /[a-zA-Z]/.test(s[j])) j++; t.push({c: s.slice(i+1, j)}); i = j; } else { t.push({c: s[j]||''}); i = j+1; } }
+    else if (ch === '{'){ let d = 1, j = i+1; while (j < s.length && d > 0){ if (s[j]==='{') d++; else if (s[j]==='}') d--; j++; } t.push({g: s.slice(i+1, j-1)}); i = j; }
+    else { t.push({ch}); i++; } }
+  return t; }
+function mfArg(t, k){ const x = t[k]; if (!x) return ['', k]; if (x.g!==undefined) return [mfRender(x.g), k+1]; if (x.c!==undefined) return [mfRender('\\'+x.c), k+1]; return [mfRender(x.ch), k+1]; }
+function mfScripts(t, k){ let sup = '', sub = ''; for (let r=0; r<2; r++){ if (t[k] && t[k].ch === '^'){ [sup, k] = mfArg(t, k+1); } else if (t[k] && t[k].ch === '_'){ [sub, k] = mfArg(t, k+1); } } return [sup, sub, k]; }
+function mfRender(src){ const t = mfTok(src); let out = ''; let k = 0;
+  while (k < t.length){ const x = t[k];
+    if (x.g!==undefined){ out += mfRender(x.g); k++; continue; }
+    if (x.ch!==undefined){ const ch = x.ch;
+      if (ch==='^' || ch==='_'){ const [a, k2] = mfArg(t, k+1); out += ch==='^' ? `<sup>${a}</sup>` : `<sub>${a}</sub>`; k = k2; continue; }
+      if (ch==='-') out += '−'; else if (/[a-zA-Z]/.test(ch)) out += `<span class="v">${ch}</span>`; else if (ch==='*') out += '·'; else out += ch;
+      k++; continue; }
+    const c = x.c; k++;
+    if (c==='dfrac' || c==='frac' || c==='tfrac'){ let a, b; [a, k] = mfArg(t, k); [b, k] = mfArg(t, k); out += `<span class="frac"><span>${a}</span><span>${b}</span></span>`; continue; }
+    if (c==='sqrt'){ let idx = ''; if (t[k] && t[k].ch==='['){ let j = k+1, s = ''; while (t[j] && t[j].ch!==']'){ s += t[j].ch!==undefined ? t[j].ch : (t[j].g!==undefined ? t[j].g : '\\'+t[j].c); j++; } idx = mfRender(s); k = j+1; }
+      let a; [a, k] = mfArg(t, k); out += `${idx ? `<sup>${idx}</sup>` : ''}√<span style="border-top:1px solid currentColor">${a}</span>`; continue; }
+    if (c==='sum'){ const [sup, sub, k2] = mfScripts(t, k); k = k2; out += `<span class="lim"><small>${sup}</small><span class="big">Σ</span><small>${sub}</small></span>`; continue; }
+    if (c==='int'){ const [sup, sub, k2] = mfScripts(t, k); k = k2; out += `<span class="big">∫</span>${sub ? `<sub>${sub}</sub>` : ''}${sup ? `<sup>${sup}</sup>` : ''}`; continue; }
+    if (c==='lim'){ const [sup, sub, k2] = mfScripts(t, k); k = k2; out += `<span class="lim">lím<small>${sub}</small></span>`; continue; }
+    if (c==='text' || c==='mathrm' || c==='operatorname'){ const g = t[k]; k++; out += g && g.g!==undefined ? g.g : ''; continue; }
+    if (c==='mathbb'){ const g = t[k]; k++; out += (g && g.g==='R') ? 'ℝ' : (g ? g.g : ''); continue; }
+    if (c==='left' || c==='right'){ if (t[k] && t[k].ch!==undefined){ out += t[k].ch==='.' ? '' : t[k].ch; k++; } else if (t[k] && t[k].c){ out += SYM[t[k].c] || ''; k++; } continue; }
+    if (SYM[c]!==undefined){ out += SYM[c]; continue; }
+    out += c; }
+  return out; }
+function mfallRender(root){
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n => (n.parentElement.closest('script,style,.mfall') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT) });
+  const nodes = []; let n; while ((n = walker.nextNode())) if (/\\[\(\[]/.test(n.nodeValue)) nodes.push(n);
+  nodes.forEach(node => { const html = node.nodeValue.replace(/\\\[([\s\S]*?)\\\]/g, (_, s) => `<span class="mfall disp">${mfRender(s)}</span>`).replace(/\\\(([\s\S]*?)\\\)/g, (_, s) => `<span class="mfall">${mfRender(s)}</span>`);
+    const span = document.createElement('span'); span.innerHTML = html; node.parentNode.replaceChild(span, node); });
+}
+
+/* ---------- autotest (?test) ---------- */
+function correrTests(){
+  const T = []; const ok = (nombre, cond, det) => T.push({nombre, ok: !!cond, det});
+  ok('30 ejercicios, ids únicos, 15 y 15', BANCO.length===30 && new Set(BANCO.map(e=>e.id)).size===30 && BANCO.filter(e=>e.nivel==='medio').length===15 && BANCO.filter(e=>e.nivel==='alto').length===15);
+  ['medio','alto'].forEach(niv => { const subs = BANCO.filter(e => e.nivel===niv).map(e => e.sub); ok(`${niv}: 6 modelización, 3 con CI, 6 libres`, subs.filter(s=>s==='mod').length===6 && subs.filter(s=>s==='ci').length===3 && subs.filter(s=>s==='libre').length===6); });
+  ok('medio: 6 opciones distintas y correcta válida', BANCO.filter(e=>e.nivel==='medio').every(e => e.opts.length===6 && new Set(e.opts).size===6 && e.correct>=0 && e.correct<6));
+  ok('alto: valor numérico, tolerancia y rótulo', BANCO.filter(e=>e.nivel==='alto').every(e => typeof e.valor==='number' && e.tol>0 && e.label));
+  ok('cada ejercicio tiene al menos 3 pasos', BANCO.every(e => e.pasos.length>=3));
+  ok('puntaje máximo = 100', 5*PTS.medio + 5*PTS.alto === 100);
+  let bien = 0, combos = new Set();
+  for (let s=0; s<300; s++){ const o = sortear(); combos.add(o.join('.'));
+    const okS = o.length===N_EJ && new Set(o).size===N_EJ && o.slice(0,POR_NIVEL).every(id => byId(id).nivel==='medio') && o.slice(POR_NIVEL).every(id => byId(id).nivel==='alto')
+      && ['medio','alto'].every(nv => { const subs = o.filter(id => byId(id).nivel===nv).map(id => byId(id).sub); return subs.join()==='libre,libre,ci,mod,mod'; });
+    if (okS) bien++; }
+  ok('300 sorteos válidos (5+5, orden libre·libre·CI·mod·mod en cada bloque)', bien===300, `${bien}/300 · ${combos.size} combinaciones distintas`);
+  const o1 = sortear(); const p1 = sortearPerm(o1);
+  ok('permutación de opciones válida para cada Medio', o1.slice(0,5).every(id => permValida(p1[id])) && o1.slice(5).every(id => !p1[id]));
+  [['3,47', 3.47], ['3.47', 3.47], ['1/2', 0.5], ['−2', -2], ['2', 2], ['abc', null], ['1/0', null], ['', null]].forEach(([s,v]) => ok(`parseNum("${s}")`, parseNum(s)===v || (v!==null && Math.abs(parseNum(s)-v)<1e-12), String(parseNum(s))));
+  const em = BANCO.find(e => e.nivel==='medio'), ea = BANCO.find(e => e.nivel==='alto');
+  ok('evaluar medio: correcta = 8', evaluar(em, String(em.correct)).pts===8 && evaluar(em, String((em.correct+1)%6)).pts===0);
+  ok('evaluar alto: dentro de tolerancia = 12', evaluar(ea, String(ea.valor).replace('.', ',')).pts===12 && evaluar(ea, String(ea.valor + 10*ea.tol)).pts===0);
+  const a04 = byId('a04'); ok('evaluar alto: 1/2 vale como 0,5', !!a04 && evaluar(a04, '1/2').pts===12);
+  ok('hash determinista y distinto', hashCodigo('a|b')===hashCodigo('a|b') && hashCodigo('a|b')!==hashCodigo('a|c'));
+  const blanco = new Uint8ClampedArray(300*300*4).fill(255);
+  const ruido = new Uint8ClampedArray(300*300*4); for (let i=0;i<ruido.length;i+=4){ const v = ((i>>2)%300 < 150) ? 40 : 220; ruido[i]=ruido[i+1]=ruido[i+2]=v; ruido[i+3]=255; }
+  ok('fotoVacia: blanco → vacía', fotoVacia(blanco, 300, 300));
+  ok('fotoVacia: con contraste → no vacía', !fotoVacia(ruido, 300, 300));
+  ok('fotoVacia: chica → vacía', fotoVacia(ruido, 100, 100));
+  ok('sin .katex-error', $$('.katex-error').length===0);
+  window.__TESTS__ = T;
+  const panel = document.createElement('div'); panel.id = 'testPanel';
+  const nOk = T.filter(t=>t.ok).length;
+  panel.innerHTML = `<div><b>Autotest: ${nOk} / ${T.length}</b></div>` + T.map(t => `<div class="${t.ok?'ok':'fail'}">${t.ok?'✓':'✗'} ${t.nombre}${t.det?' · '+t.det:''}</div>`).join('');
+  document.body.appendChild(panel);
+}
+
+/* ---------- arranque ---------- */
+async function init(){
+  if (!window.renderMathInElement){ window.__katexFailed = true; window.renderMathInElement = mfallRender; }
+  tex(document.body);
+  cargar();
+  db = await abrirDB();
+  await dbLoadAll();
+  if (enCurso()){ renderLista(); if (ST.vista==='resultados' && terminada()) irResultados(); else if (ST.vista==='actividad') irActividad(); else irPortada(); }
+  else irPortada();
+  if (/[?&]test\b/.test(location.search)) correrTests();
+  window.__READY = true;
+}
+window.__LAB = { BANCO, CUPOS, PTS, MAX_FOTOS, sortear, sortearPerm, evaluar, puntajes, setFotos, agregarFoto, quitarFoto, comenzar, confirmar, hashCodigo, fotoVacia, parseNum, irPortada, irActividad, irResultados, reiniciar, codigo, firma, get STATE(){ return ST; }, get FOTOS(){ return FOTOS; } };
+if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', () => setTimeout(init, 0)); else setTimeout(init, 0);
+})();
+</script>
+</body>
+</html>
